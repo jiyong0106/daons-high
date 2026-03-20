@@ -36,6 +36,32 @@ function FloatingEmojis() {
   );
 }
 
+// 타이핑 효과 텍스트 컴포넌트
+function TypingText({ text }: { text: string }) {
+  return (
+    <motion.p
+      className="text-xs text-center leading-relaxed text-[var(--text-secondary)] opacity-80 max-w-xs md:max-w-md"
+      initial="hidden"
+      animate="visible"
+      variants={{
+        visible: { transition: { staggerChildren: 0.03, delayChildren: 0.5 } },
+      }}
+    >
+      {text.split("").map((char, i) => (
+        <motion.span
+          key={i}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1 },
+          }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </motion.p>
+  );
+}
+
 export default function MainPage() {
   const navigate = useNavigate();
   const initGame = useGameStore((s) => s.initGame);
@@ -45,10 +71,14 @@ export default function MainPage() {
     navigate("/puzzle");
   };
 
+  const description =
+    "다온스 하이(daon's High)는 다온이나 라온이를 30분 이상 보면 뇌에서 엔도르핀과 엔도카나비노이드가 분비되어 피로감 대신 극적인 행복감과 상쾌함을 느끼는 상태입니다. 1979년 아놀드 맨델이 제안한 개념으로, 팔다리가 가벼워지고 통증이 사라지며 도취감을 느끼게 됩니다";
+
   return (
     <Layout>
-      <div className="flex-1 flex flex-col items-center justify-center gap-5 px-2 py-12 relative">
+      <div className="flex-1 flex flex-col items-center justify-start gap-5 px-2 py-15 relative">
         <FloatingEmojis />
+        <TypingText text={description} />
 
         {/* 로고 및 타이틀 */}
         <motion.div
@@ -156,7 +186,10 @@ export default function MainPage() {
             />
             <span className="relative">시작하기</span>
           </motion.button>
-          <img
+          <motion.img
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1.2, type: "spring" }}
             src={daonGif}
             alt="메인 로고"
             className="w-40 h-40 md:w-48 md:h-48 object-contain z-10 absolute bottom-[-80px] right-[-100px]"
