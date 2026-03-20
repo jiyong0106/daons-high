@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGameStore } from "../stores/gameStore";
@@ -12,6 +12,7 @@ export default function PuzzlePage() {
   const gameStatus = useGameStore((s) => s.gameStatus);
   const initGame = useGameStore((s) => s.initGame);
   const navigate = useNavigate();
+  const [loadingMsg, setLoadingMsg] = useState("");
 
   // 타이머 훅 활성화
   useTimer();
@@ -22,6 +23,25 @@ export default function PuzzlePage() {
       navigate("/", { replace: true });
     }
   }, [gameStatus, navigate]);
+
+  // 로딩 메시지 랜덤 선택
+  useEffect(() => {
+    if (gameStatus === "loading") {
+      const messages = [
+        "맛있는 츄르 먹는 중...",
+        "캣타워에 올라가는 중...",
+        "창밖 구경하는 중...",
+        "따듯한 곳에서 낮잠 자는 중...",
+        "맹수가 되어 장난감 사냥하는 중...",
+        "기분 좋아 꾹꾹이 하는 중...",
+        "냥빨하고 그루밍 하는 중...",
+        "집사가 불러서 쳐다보는 중...",
+        "집사 무릎에 앉아있는 중...",
+      ];
+      const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+      setLoadingMsg(randomMsg);
+    }
+  }, [gameStatus]);
 
   // 로딩 중
   if (gameStatus === "loading") {
@@ -40,9 +60,7 @@ export default function PuzzlePage() {
             >
               🐱
             </motion.div>
-            <p className="text-[var(--text-secondary)]">
-              다온이와 라온이 맛있게 츄르 먹는 중...
-            </p>
+            <p className="text-[var(--text-secondary)]">{loadingMsg}</p>
           </motion.div>
         </div>
       </Layout>

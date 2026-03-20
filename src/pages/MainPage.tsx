@@ -192,7 +192,7 @@ export default function MainPage() {
             transition={{ delay: 1.2, type: "spring" }}
             src={daonGif}
             alt="메인 로고"
-            className="w-40 h-40 md:w-48 md:h-48 object-contain z-10 absolute bottom-[-80px] right-[-100px]"
+            className="w-40 h-40 md:w-48 md:h-48 object-contain  absolute bottom-[-70px] right-[-110px] pointer-events-none"
           />
         </motion.div>
       </div>
