@@ -131,12 +131,22 @@ export default function MainPage() {
                cursor-pointer
                relative overflow-hidden
             "
+            animate={{
+              y: [0, -10, 0], // 0에서 -10px만큼 올라갔다가 다시 0으로
+            }}
+            transition={{
+              duration: 1, // 1.5초 동안 한 번의 사이클
+              repeat: Infinity, // 무한 반복
+              ease: "easeInOut", // 부드럽게 가속/감속
+            }}
+            /* --- 점핑 애니메이션 추가 끝 --- */
+
             whileHover={{
               scale: 1.05,
               boxShadow: "0 20px 40px rgba(200, 0, 0, 0.4)",
+              /* 호버 시 점핑 멈추게 하고 싶다면 y: 0 추가 가능 */
             }}
             whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 20 }}
           >
             {/* 버튼 내부 광택 효과 */}
             <motion.div
