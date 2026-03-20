@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGameStore } from "../stores/gameStore";
 import Layout from "../components/layout/Layout";
+import NicknameModal from "../components/modals/NicknameModal";
+import RankingModal from "../components/modals/RankingModal";
 import daonGif from "../assets/images/redaon.gif"; // 경로에 맞춰 수정
 
 // 떠다니는 고양이 이모지 배경 장식
@@ -64,9 +67,23 @@ function TypingText({ text }: { text: string }) {
 
 export default function MainPage() {
   const navigate = useNavigate();
-  const initGame = useGameStore((s) => s.initGame);
+  const { userName, setUserName, initGame } = useGameStore();
+  const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
+  const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
 
   const handleStartPuzzle = async () => {
+    if (!userName) {
+      setIsNicknameModalOpen(true);
+      return;
+    }
+    await initGame();
+    navigate("/puzzle");
+  };
+
+  const handleNicknameConfirm = async (nickname: string) => {
+    setUserName(nickname);
+    setIsNicknameModalOpen(false);
+    // 닉네임 설정 후 바로 게임 시작
     await initGame();
     navigate("/puzzle");
   };
@@ -186,6 +203,7 @@ export default function MainPage() {
             />
             <span className="relative">시작하기</span>
           </motion.button>
+
           <motion.img
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -195,7 +213,25 @@ export default function MainPage() {
             className="w-40 h-40 md:w-48 md:h-48 object-contain  absolute bottom-[-70px] right-[-110px] pointer-events-none"
           />
         </motion.div>
+        {/* 랭킹 확인 버튼 추가 */}
+        {/* <motion.button
+          onClick={() => setIsRankingModalOpen(true)}
+          className="w-full mt-4 text-sm text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
+          whileHover={{ opacity: 1, scale: 1.05 }}
+        >
+          🏆 랭킹 확인하기
+        </motion.button> */}
       </div>
+
+      {/* 모달들 */}
+      <NicknameModal
+        isOpen={isNicknameModalOpen}
+        onConfirm={handleNicknameConfirm}
+      />
+      <RankingModal
+        isOpen={isRankingModalOpen}
+        onClose={() => setIsRankingModalOpen(false)}
+      />
     </Layout>
   );
 }

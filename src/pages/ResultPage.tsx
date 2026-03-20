@@ -4,18 +4,34 @@ import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
 import { useGameStore } from "../stores/gameStore";
 import { formatTime } from "../hooks/useTimer";
+import { saveRanking } from "../utils/rankingUtils";
 import Layout from "../components/layout/Layout";
 
 export default function ResultPage() {
   const navigate = useNavigate();
   const cardRef = useRef<HTMLDivElement>(null);
-  const gameStatus = useGameStore((s) => s.gameStatus);
-  const selectedImage = useGameStore((s) => s.selectedImage);
-  const moveCount = useGameStore((s) => s.moveCount);
-  const elapsedTime = useGameStore((s) => s.elapsedTime);
-  const resetGame = useGameStore((s) => s.resetGame);
-  const initGame = useGameStore((s) => s.initGame);
-  const catName = useGameStore((s) => s.catName);
+  const { 
+    gameStatus, 
+    selectedImage, 
+    moveCount, 
+    elapsedTime, 
+    catName, 
+    userName,
+    resetGame,
+    initGame 
+  } = useGameStore();
+
+  // 게임 완료 시 랭킹 저장
+  useEffect(() => {
+    if (gameStatus === "completed" && userName) {
+      saveRanking({
+        userName,
+        time: elapsedTime,
+        moveCount,
+        date: Date.now(),
+      });
+    }
+  }, [gameStatus, userName, elapsedTime, moveCount]);
 
   // 게임 완료 상태가 아니면 메인으로
   useEffect(() => {

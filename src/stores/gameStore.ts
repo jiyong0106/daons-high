@@ -10,10 +10,15 @@ import {
   getRandomCatImage,
   getCatNameFromPath,
 } from "../utils/imageUtils";
+import { getStoredUserName, setStoredUserName as setLocalUserName } from "../utils/rankingUtils";
 
 export type GameStatus = "idle" | "loading" | "playing" | "completed";
 
 interface GameState {
+  // 사용자 정보
+  userName: string | null;
+  setUserName: (name: string) => void;
+
   // 게임 상태
   gameStatus: GameStatus;
   selectedImage: string | null; // 선택된 원본 이미지 경로
@@ -32,6 +37,11 @@ interface GameState {
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
+  userName: getStoredUserName(),
+  setUserName: (name: string) => {
+    setLocalUserName(name);
+    set({ userName: name });
+  },
   gameStatus: "idle",
   selectedImage: null,
   catName: "고양이",
