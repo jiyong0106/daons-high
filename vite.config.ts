@@ -1,8 +1,43 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { VitePWA } from "vite-plugin-pwa"; // 1. 플러그인 임포트
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    // 2. PWA 설정 추가
+    VitePWA({
+      registerType: "autoUpdate",
+      includeAssets: ["favicon.ico", "image/iphone.png", "image/metaimage.png"],
+      manifest: {
+        name: "다온스하이 | daon's high",
+        short_name: "다온스하이",
+        description: "귀여운 냥 퍼즐을 맞춰 부적을 획득하세요!",
+        theme_color: "#fff8f0",
+        background_color: "#fff8f0",
+        display: "standalone",
+        icons: [
+          {
+            src: "image/android.png", // public/image/android.png를 가리킴
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "image/splash.png", // public/image/splash.png를 가리킴
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "image/splash.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable", // 안드로이드용 마스커블 설정
+          },
+        ],
+      },
+    }),
+  ],
 });
