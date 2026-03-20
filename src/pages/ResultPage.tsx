@@ -10,15 +10,15 @@ import Layout from "../components/layout/Layout";
 export default function ResultPage() {
   const navigate = useNavigate();
   const cardRef = useRef<HTMLDivElement>(null);
-  const { 
-    gameStatus, 
-    selectedImage, 
-    moveCount, 
-    elapsedTime, 
-    catName, 
+  const {
+    gameStatus,
+    selectedImage,
+    moveCount,
+    elapsedTime,
+    catName,
     userName,
     resetGame,
-    initGame 
+    initGame,
   } = useGameStore();
 
   // 게임 완료 시 랭킹 저장
@@ -70,10 +70,13 @@ export default function ResultPage() {
 
     try {
       const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: "#fff8f0",
-        scale: 1,
         useCORS: true,
-        logging: false,
+        allowTaint: true,
+        scale: 2, // 1. 배율을 2배로 고정 (화면 비율에 따른 자동 확대를 방지하고 고화질 유지)
+        scrollX: 0, // 2. 가로 스크롤 보정
+        scrollY: -window.scrollY, // 3. 세로 스크롤 위치를 0으로 강제 보정 (가장 중요한 포인트!)
+        backgroundColor: "#fff8f0",
+        logging: false, // 콘솔 로그 출력 안 함
       });
 
       canvas.toBlob(async (blob) => {
