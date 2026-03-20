@@ -114,6 +114,7 @@ export default function PuzzleBoard() {
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
             }}
+            onClick={() => setIsFlipped((prev) => !prev)}
           >
             {/* 부적 느낌의 장식 프레임 */}
             <div className="relative w-full h-full rounded-xl overflow-hidden">
@@ -126,10 +127,14 @@ export default function PuzzleBoard() {
 
               {/* 반투명 오버레이 + 힌트 라벨 */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 rounded-xl" />
-              <div className="absolute top-3 left-3 bg-[var(--color-accent)] text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+              <div className="absolute top-3 left-3 bg-[var(--color-accent)] text-white text-xs px-3 py-1 rounded-full shadow-md">
                 💡 원본 이미지
               </div>
-              <div className="absolute bottom-3 left-0 right-0 text-center"></div>
+              <div className="absolute bottom-3 left-0 right-0 text-center ">
+                <span className="text-white text-sm px-3 py-1 rounded-full bg-[var(--color-accent)]">
+                  👆 탭하여 퍼즐로 돌아가기
+                </span>
+              </div>
 
               {/* 테두리 장식 */}
               <div className="absolute inset-0 border-3 border-[var(--color-accent)] rounded-xl opacity-60" />

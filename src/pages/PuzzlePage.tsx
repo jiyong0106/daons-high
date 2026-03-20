@@ -41,7 +41,7 @@ export default function PuzzlePage() {
               🐱
             </motion.div>
             <p className="text-[var(--text-secondary)]">
-              다온이와 라온이를 데려오는 중...
+              다온이와 라온이 맛있게 츄르 먹는 중...
             </p>
           </motion.div>
         </div>
@@ -82,7 +82,7 @@ export default function PuzzlePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          🐱 다른 사진으로 시작하기
+          🐱 다른 사진으로 다시하기
         </motion.button>
       </div>
 

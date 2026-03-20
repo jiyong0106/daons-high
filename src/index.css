@@ -67,7 +67,9 @@
 * {
   box-sizing: border-box;
 }
-
+html {
+  background-color: var(--bg-primary);
+}
 body {
   margin: 0;
   padding: 0;
