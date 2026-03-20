@@ -127,7 +127,7 @@ export default function MainPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            퍼즐을 맞춰 고양이 부적을 획득하세요!
+            퍼즐을 맞춰 부적을 획득하세요!
           </motion.p>
         </motion.div>
 
