@@ -1,10 +1,3 @@
-/**
- * 퍼즐 완성 오버레이 컴포넌트
- * - 축하 애니메이션 연출
- * - 완성된 이미지 전체 표시
- * - 결과 페이지로 이동
- */
-
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useGameStore } from "../../stores/gameStore";

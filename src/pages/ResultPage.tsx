@@ -25,28 +25,28 @@ export default function ResultPage() {
   }, [gameStatus, navigate]);
 
   // 기록 카드 캡처 및 저장 기능
-  const handleSaveRecord = async () => {
-    if (!cardRef.current) return;
+  // const handleSaveRecord = async () => {
+  //   if (!cardRef.current) return;
 
-    try {
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: "#fff8f0", // var(--bg-primary) 색상 명시
-        scale: 2, // 고해상도 캡처
-        useCORS: true,
-        logging: false,
-      });
+  //   try {
+  //     const canvas = await html2canvas(cardRef.current, {
+  //       backgroundColor: "#fff8f0", // var(--bg-primary) 색상 명시
+  //       scale: 2, // 고해상도 캡처
+  //       useCORS: true,
+  //       logging: false,
+  //     });
 
-      const url = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `daons-high-${catName}-${Date.now()}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("기록 저장 실패:", error);
-    }
-  };
+  //     const url = canvas.toDataURL("image/png");
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.download = `daons-high-${catName}-${Date.now()}.png`;
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //   } catch (error) {
+  //     console.error("기록 저장 실패:", error);
+  //   }
+  // };
 
   // 기록 카드 캡처 및 공유 기능 (Web Share API)
   const handleShareRecord = async () => {
@@ -55,7 +55,7 @@ export default function ResultPage() {
     try {
       const canvas = await html2canvas(cardRef.current, {
         backgroundColor: "#fff8f0",
-        scale: 2,
+        scale: 1,
         useCORS: true,
         logging: false,
       });
@@ -173,14 +173,14 @@ export default function ResultPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          <motion.button
+          {/* <motion.button
             onClick={handleSaveRecord}
             className="w-full py-3 bg-[var(--color-primary)] text-white rounded-xl font-bold shadow-lg cursor-pointer"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
             💾 기록 저장하기
-          </motion.button>
+          </motion.button> */}
 
           {typeof navigator !== "undefined" && "share" in navigator && (
             <motion.button
