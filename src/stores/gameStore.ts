@@ -1,34 +1,40 @@
-/**
- * Zustand 게임 스토어
- * - 전체 게임 상태 관리 (이미지, 타일, 이동 횟수, 시간, 상태)
- */
+import { create } from "zustand";
+import {
+  generateSolvablePuzzle,
+  moveTile as moveTileUtil,
+  isComplete,
+  EMPTY_TILE,
+} from "../utils/puzzleUtils";
+import {
+  sliceImage,
+  getRandomCatImage,
+  getCatNameFromPath,
+} from "../utils/imageUtils";
 
-import { create } from 'zustand';
-import { generateSolvablePuzzle, moveTile as moveTileUtil, isComplete, EMPTY_TILE } from '../utils/puzzleUtils';
-import { sliceImage, getRandomCatImage } from '../utils/imageUtils';
-
-export type GameStatus = 'idle' | 'loading' | 'playing' | 'completed';
+export type GameStatus = "idle" | "loading" | "playing" | "completed";
 
 interface GameState {
   // 게임 상태
   gameStatus: GameStatus;
-  selectedImage: string | null;       // 선택된 원본 이미지 경로
-  tiles: number[];                    // 현재 타일 배치 [0-8]
-  tileSources: string[];              // 분할된 타일 이미지 data URL 배열 (9개)
-  moveCount: number;                  // 이동 횟수
-  elapsedTime: number;                // 소요 시간 (초)
+  selectedImage: string | null; // 선택된 원본 이미지 경로
+  catName: string; // 고양이 이름 (다온/라온)
+  tiles: number[]; // 현재 타일 배치 [0-8]
+  tileSources: string[]; // 분할된 타일 이미지 data URL 배열 (9개)
+  moveCount: number; // 이동 횟수
+  elapsedTime: number; // 소요 시간 (초)
 
   // 액션
-  initGame: () => Promise<void>;      // 새 게임 초기화 (이미지 로드 + 셔플)
+  initGame: () => Promise<void>; // 새 게임 초기화 (이미지 로드 + 셔플)
   clickTile: (index: number) => void; // 타일 클릭 처리
-  resetGame: () => void;              // 게임 리셋 (메인으로)
-  shuffleOnly: () => void;            // 같은 이미지로 재셔플
+  resetGame: () => void; // 게임 리셋 (메인으로)
+  shuffleOnly: () => void; // 같은 이미지로 재셔플
   setElapsedTime: (time: number) => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
-  gameStatus: 'idle',
+  gameStatus: "idle",
   selectedImage: null,
+  catName: "고양이",
   tiles: [],
   tileSources: [],
   moveCount: 0,
@@ -36,11 +42,14 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   initGame: async () => {
     const { selectedImage: prevImage } = get();
-    set({ gameStatus: 'loading' });
+    set({ gameStatus: "loading" });
 
     try {
       // 랜덤 고양이 이미지 선택 (이전과 다른 이미지)
       const imageSrc = getRandomCatImage(prevImage);
+
+      // 이미지 경로에서 이름 추출
+      const catName = getCatNameFromPath(imageSrc);
 
       // Canvas로 이미지 슬라이싱
       const tileSources = await sliceImage(imageSrc);
@@ -49,22 +58,23 @@ export const useGameStore = create<GameState>((set, get) => ({
       const tiles = generateSolvablePuzzle();
 
       set({
-        gameStatus: 'playing',
+        gameStatus: "playing",
         selectedImage: imageSrc,
+        catName,
         tiles,
         tileSources,
         moveCount: 0,
         elapsedTime: 0,
       });
     } catch (error) {
-      console.error('게임 초기화 실패:', error);
-      set({ gameStatus: 'idle' });
+      console.error("게임 초기화 실패:", error);
+      set({ gameStatus: "idle" });
     }
   },
 
   clickTile: (index: number) => {
     const { tiles, gameStatus } = get();
-    if (gameStatus !== 'playing') return;
+    if (gameStatus !== "playing") return;
 
     // 빈칸 클릭은 무시
     if (tiles[index] === EMPTY_TILE) return;
@@ -77,13 +87,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     set((state) => ({
       tiles: newTiles,
       moveCount: state.moveCount + 1,
-      gameStatus: completed ? 'completed' : 'playing',
+      gameStatus: completed ? "completed" : "playing",
     }));
   },
 
   resetGame: () => {
     set({
-      gameStatus: 'idle',
+      gameStatus: "idle",
       selectedImage: null,
       tiles: [],
       tileSources: [],
@@ -98,7 +108,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       tiles,
       moveCount: 0,
       elapsedTime: 0,
-      gameStatus: 'playing',
+      gameStatus: "playing",
     });
   },
 

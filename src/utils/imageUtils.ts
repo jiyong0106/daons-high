@@ -1,20 +1,26 @@
-/**
- * 이미지 처리 유틸리티
- * - 이미지 로드
- * - 3x3 그리드 슬라이싱 (Canvas API)
- * - 랜덤 이미지 선택
- */
+import { GRID_SIZE, TOTAL_TILES } from "./puzzleUtils";
 
-import { GRID_SIZE, TOTAL_TILES } from './puzzleUtils';
-
-// 로컬 고양이 이미지 목록 (1.png ~ 26.png)
+// 로컬 고양이 이미지 목록 (da*.png, ra*.png)
 const CAT_IMAGE_MODULES = import.meta.glob<{ default: string }>(
-  '../assets/images/*.png',
-  { eager: true }
+  "../assets/images/*.png",
+  { eager: true },
 );
 
 // 이미지 경로 배열로 변환
-const CAT_IMAGES: string[] = Object.values(CAT_IMAGE_MODULES).map((mod) => mod.default);
+const CAT_IMAGES: string[] = Object.values(CAT_IMAGE_MODULES).map(
+  (mod) => mod.default,
+);
+
+/**
+ * 이미지 경로에서 고양이 이름(다온/라온)을 추출.
+ * 파일명에 'da'가 포함되면 다온, 'ra'가 포함되면 라온.
+ */
+export function getCatNameFromPath(path: string): string {
+  const filename = path.split("/").pop()?.toLowerCase() || "";
+  if (filename.includes("da")) return "다온";
+  if (filename.includes("ra")) return "라온";
+  return "고양이";
+}
 
 /**
  * 랜덤 고양이 이미지 경로 반환.
@@ -22,7 +28,9 @@ const CAT_IMAGES: string[] = Object.values(CAT_IMAGE_MODULES).map((mod) => mod.d
  */
 export function getRandomCatImage(previousImage?: string | null): string {
   if (CAT_IMAGES.length === 0) {
-    throw new Error('고양이 이미지가 없습니다. src/assets/images/ 폴더를 확인하세요.');
+    throw new Error(
+      "고양이 이미지가 없습니다. src/assets/images/ 폴더를 확인하세요.",
+    );
   }
 
   if (CAT_IMAGES.length === 1) return CAT_IMAGES[0];
@@ -41,7 +49,7 @@ export function getRandomCatImage(previousImage?: string | null): string {
 export function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    img.crossOrigin = "anonymous";
     img.onload = () => resolve(img);
     img.onerror = () => reject(new Error(`이미지 로드 실패: ${src}`));
     img.src = src;
@@ -73,26 +81,26 @@ export async function sliceImage(imageSrc: string): Promise<string[]> {
     const row = Math.floor(i / GRID_SIZE);
     const col = i % GRID_SIZE;
 
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = tileSize;
     canvas.height = tileSize;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
-    if (!ctx) throw new Error('Canvas 2D 컨텍스트를 가져올 수 없습니다.');
+    if (!ctx) throw new Error("Canvas 2D 컨텍스트를 가져올 수 없습니다.");
 
     ctx.drawImage(
       img,
       offsetX + col * tileSize, // 소스 x
       offsetY + row * tileSize, // 소스 y
-      tileSize,                 // 소스 width
-      tileSize,                 // 소스 height
-      0,                        // 캔버스 x
-      0,                        // 캔버스 y
-      tileSize,                 // 캔버스 width
-      tileSize                  // 캔버스 height
+      tileSize, // 소스 width
+      tileSize, // 소스 height
+      0, // 캔버스 x
+      0, // 캔버스 y
+      tileSize, // 캔버스 width
+      tileSize, // 캔버스 height
     );
 
-    tiles.push(canvas.toDataURL('image/webp', 0.9));
+    tiles.push(canvas.toDataURL("image/webp", 0.9));
   }
 
   return tiles;

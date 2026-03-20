@@ -156,12 +156,12 @@ export default function MainPage() {
             />
             <span className="relative">시작하기</span>
           </motion.button>
+          <img
+            src={daonGif}
+            alt="메인 로고"
+            className="w-40 h-40 md:w-48 md:h-48 object-contain z-10 absolute bottom-[-80px] right-[-100px]"
+          />
         </motion.div>
-        <img
-          src={daonGif}
-          alt="메인 로고"
-          className="w-40 h-40 md:w-48 md:h-48 object-contain z-10 absolute bottom-20 right-0"
-        />
       </div>
     </Layout>
   );

@@ -1,16 +1,9 @@
-/**
- * 결과 페이지
- * - 완성된 고양이 이미지 전체 표시
- * - 기록(시간, 이동 횟수) 표시
- * - 이미지 저장 / 다시 하기 버튼
- */
-
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useGameStore } from '../stores/gameStore';
-import { formatTime } from '../hooks/useTimer';
-import Layout from '../components/layout/Layout';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useGameStore } from "../stores/gameStore";
+import { formatTime } from "../hooks/useTimer";
+import Layout from "../components/layout/Layout";
 
 export default function ResultPage() {
   const navigate = useNavigate();
@@ -20,11 +13,12 @@ export default function ResultPage() {
   const elapsedTime = useGameStore((s) => s.elapsedTime);
   const resetGame = useGameStore((s) => s.resetGame);
   const initGame = useGameStore((s) => s.initGame);
+  const catName = useGameStore((s) => s.catName);
 
   // 게임 완료 상태가 아니면 메인으로
   useEffect(() => {
-    if (gameStatus !== 'completed') {
-      navigate('/', { replace: true });
+    if (gameStatus !== "completed") {
+      navigate("/", { replace: true });
     }
   }, [gameStatus, navigate]);
 
@@ -37,7 +31,7 @@ export default function ResultPage() {
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `daons-high-cat-${Date.now()}.png`;
       document.body.appendChild(link);
@@ -45,7 +39,7 @@ export default function ResultPage() {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch {
-      console.error('이미지 저장 실패');
+      console.error("이미지 저장 실패");
     }
   };
 
@@ -56,10 +50,12 @@ export default function ResultPage() {
     try {
       const response = await fetch(selectedImage);
       const blob = await response.blob();
-      const file = new File([blob], 'daons-high-cat.png', { type: 'image/png' });
+      const file = new File([blob], "daons-high-cat.png", {
+        type: "image/png",
+      });
 
       await navigator.share({
-        title: '다온스하이 - 퍼즐 완성!',
+        title: "다온스하이 - 퍼즐 완성!",
         text: `🐱 고양이 퍼즐을 ${formatTime(elapsedTime)}에 ${moveCount}회 이동으로 맞췄어요!`,
         files: [file],
       });
@@ -71,16 +67,16 @@ export default function ResultPage() {
   // 다시 하기
   const handlePlayAgain = async () => {
     await initGame();
-    navigate('/puzzle');
+    navigate("/puzzle");
   };
 
   // 홈으로
   const handleGoHome = () => {
     resetGame();
-    navigate('/');
+    navigate("/");
   };
 
-  if (gameStatus !== 'completed') return null;
+  if (gameStatus !== "completed") return null;
 
   return (
     <Layout>
@@ -96,7 +92,7 @@ export default function ResultPage() {
             🎉 축하합니다!
           </h1>
           <p className="text-[var(--text-secondary)]">
-            멋진 고양이를 완성했어요
+            멋진 {catName}이를 완성했어요!
           </p>
         </motion.div>
 
@@ -108,7 +104,7 @@ export default function ResultPage() {
             animate={{ scale: 1, opacity: 1, rotateY: 0 }}
             transition={{
               delay: 0.2,
-              type: 'spring',
+              type: "spring",
               stiffness: 200,
               damping: 20,
             }}
@@ -133,14 +129,18 @@ export default function ResultPage() {
           transition={{ delay: 0.5 }}
         >
           <div className="text-center">
-            <p className="text-xs text-[var(--text-secondary)] mb-1">⏱ 소요 시간</p>
+            <p className="text-xs text-[var(--text-secondary)] mb-1">
+              ⏱ 소요 시간
+            </p>
             <p className="text-2xl font-bold text-[var(--color-primary)] tabular-nums">
               {formatTime(elapsedTime)}
             </p>
           </div>
           <div className="w-px bg-[var(--border-color)]" />
           <div className="text-center">
-            <p className="text-xs text-[var(--text-secondary)] mb-1">👆 이동 횟수</p>
+            <p className="text-xs text-[var(--text-secondary)] mb-1">
+              👆 이동 횟수
+            </p>
             <p className="text-2xl font-bold text-[var(--color-primary)] tabular-nums">
               {moveCount}회
             </p>
@@ -163,7 +163,7 @@ export default function ResultPage() {
             💾 이미지 저장하기
           </motion.button>
 
-          {typeof navigator !== 'undefined' && 'share' in navigator && (
+          {typeof navigator !== "undefined" && "share" in navigator && (
             <motion.button
               onClick={handleShare}
               className="w-full py-3 bg-[var(--color-accent)] text-white rounded-xl font-bold shadow-md cursor-pointer"
@@ -180,7 +180,7 @@ export default function ResultPage() {
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
-            🐱 다른 고양이로 다시 하기
+            🐱 다른 {catName}이로 다시 하기
           </motion.button>
 
           <motion.button

@@ -5,14 +5,14 @@
  * - 결과 페이지로 이동
  */
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { useGameStore } from '../../stores/gameStore';
-import { formatTime } from '../../hooks/useTimer';
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useGameStore } from "../../stores/gameStore";
+import { formatTime } from "../../hooks/useTimer";
 
 // 떨어지는 별/고양이발 파티클
 function Particles() {
-  const emojis = ['⭐', '🐾', '✨', '🎉', '🐱', '💛'];
+  const emojis = ["⭐", "🐾", "✨", "🎉", "🐱", "💛"];
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
       {Array.from({ length: 24 }).map((_, i) => (
@@ -26,14 +26,14 @@ function Particles() {
             opacity: 1,
           }}
           animate={{
-            y: '110vh',
+            y: "110vh",
             rotate: Math.random() * 720 - 360,
             opacity: [1, 1, 0],
           }}
           transition={{
             duration: 2.5 + Math.random() * 2,
             delay: Math.random() * 1.5,
-            ease: 'easeIn',
+            ease: "easeIn",
           }}
         >
           {emojis[i % emojis.length]}
@@ -50,7 +50,7 @@ export default function PuzzleComplete() {
   const selectedImage = useGameStore((s) => s.selectedImage);
   const navigate = useNavigate();
 
-  const isCompleted = gameStatus === 'completed';
+  const isCompleted = gameStatus === "completed";
 
   return (
     <AnimatePresence>
@@ -80,7 +80,7 @@ export default function PuzzleComplete() {
               animate={{ scale: 1, rotate: 0 }}
               exit={{ scale: 0 }}
               transition={{
-                type: 'spring',
+                type: "spring",
                 stiffness: 300,
                 damping: 20,
                 delay: 0.3,
@@ -91,7 +91,7 @@ export default function PuzzleComplete() {
                 className="text-6xl mb-4"
                 initial={{ scale: 0, y: -20 }}
                 animate={{ scale: 1, y: 0 }}
-                transition={{ delay: 0.6, type: 'spring', stiffness: 500 }}
+                transition={{ delay: 0.6, type: "spring", stiffness: 500 }}
               >
                 🎊
               </motion.div>
@@ -111,7 +111,7 @@ export default function PuzzleComplete() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                멋진 고양이가 나타났어요! 🐱
+                귀여운 {useGameStore.getState().catName}이를 완성했어요! 🐱
               </motion.p>
 
               {/* 완성된 이미지 미리보기 */}
@@ -120,7 +120,7 @@ export default function PuzzleComplete() {
                   className="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg border-4 border-[var(--color-accent)]"
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.9, type: 'spring' }}
+                  transition={{ delay: 0.9, type: "spring" }}
                 >
                   <img
                     src={selectedImage}
@@ -138,13 +138,17 @@ export default function PuzzleComplete() {
                 transition={{ delay: 1.0 }}
               >
                 <div className="text-center">
-                  <p className="text-xs text-[var(--text-secondary)]">소요 시간</p>
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    소요 시간
+                  </p>
                   <p className="text-xl font-bold text-[var(--color-primary)]">
                     {formatTime(elapsedTime)}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs text-[var(--text-secondary)]">이동 횟수</p>
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    이동 횟수
+                  </p>
                   <p className="text-xl font-bold text-[var(--color-primary)]">
                     {moveCount}회
                   </p>
@@ -159,7 +163,7 @@ export default function PuzzleComplete() {
                 transition={{ delay: 1.1 }}
               >
                 <motion.button
-                  onClick={() => navigate('/result')}
+                  onClick={() => navigate("/result")}
                   className="w-full py-3 bg-[var(--color-primary)] text-white rounded-xl font-bold text-base shadow-lg cursor-pointer"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
