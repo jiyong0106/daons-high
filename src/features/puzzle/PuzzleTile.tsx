@@ -5,14 +5,14 @@
  * - 클릭 시 진동 피드백 (모바일)
  */
 
-import { motion } from 'framer-motion';
-import { EMPTY_TILE, GRID_SIZE } from '../../utils/puzzleUtils';
+import { motion } from "framer-motion";
+import { EMPTY_TILE, GRID_SIZE } from "../../utils/puzzleUtils";
 
 interface PuzzleTileProps {
-  tileValue: number;           // 타일 번호 (0-8)
-  currentIndex: number;        // 현재 보드상 위치 (0-8)
-  imageSrc: string;            // 타일 이미지 data URL
-  boardSize: number;           // 보드 전체 크기 (px)
+  tileValue: number; // 타일 번호 (0-8)
+  currentIndex: number; // 현재 보드상 위치 (0-8)
+  imageSrc: string; // 타일 이미지 data URL
+  boardSize: number; // 보드 전체 크기 (px)
   onClick: (index: number) => void;
 }
 
@@ -43,7 +43,7 @@ export default function PuzzleTile({
 
   return (
     <motion.div
-      layout  // Framer Motion layout animation
+      layout // Framer Motion layout animation
       className="absolute cursor-pointer"
       style={{
         width: tileSize,
@@ -56,7 +56,7 @@ export default function PuzzleTile({
         scale: isEmptyTile ? 0.8 : 1,
       }}
       transition={{
-        type: 'spring',
+        type: "spring",
         stiffness: 400,
         damping: 30,
         mass: 0.8,
@@ -66,11 +66,11 @@ export default function PuzzleTile({
     >
       {!isEmptyTile && (
         <div
-          className="w-full h-full rounded-lg overflow-hidden shadow-md border border-white/20"
+          className="w-full h-full rounded-lg overflow-hidden shadow-md"
           style={{
             backgroundImage: `url(${imageSrc})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         />
       )}
