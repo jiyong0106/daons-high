@@ -63,16 +63,14 @@
 }
 
 /* ===== 리셋 ===== */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
+
+* {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  padding: 0;
   min-height: 100svh;
   background-color: var(--bg-primary);
 }
