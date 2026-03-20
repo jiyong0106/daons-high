@@ -5,6 +5,8 @@ import { useGameStore } from "../stores/gameStore";
 import Layout from "../components/layout/Layout";
 import NicknameModal from "../components/modals/NicknameModal";
 import RankingModal from "../components/modals/RankingModal";
+import InstallGuideModal from "../components/modals/InstallGuideModal";
+import { usePWAInstall } from "../hooks/usePWAInstall";
 import daonGif from "../assets/images/redaon.gif"; // 경로에 맞춰 수정
 
 // 떠다니는 고양이 이모지 배경 장식
@@ -68,8 +70,10 @@ function TypingText({ text }: { text: string }) {
 export default function MainPage() {
   const navigate = useNavigate();
   const { userName, setUserName, initGame } = useGameStore();
+  const { isInstallable, isStandalone, isIOS, handleInstall } = usePWAInstall();
   const [isNicknameModalOpen, setIsNicknameModalOpen] = useState(false);
   const [isRankingModalOpen, setIsRankingModalOpen] = useState(false);
+  const [isInstallGuideOpen, setIsInstallGuideOpen] = useState(false);
 
   const handleStartPuzzle = async () => {
     if (!userName) {
@@ -78,6 +82,14 @@ export default function MainPage() {
     }
     await initGame();
     navigate("/puzzle");
+  };
+
+  const onInstallClick = () => {
+    if (isInstallable) {
+      handleInstall();
+    } else if (isIOS) {
+      setIsInstallGuideOpen(true);
+    }
   };
 
   const handleNicknameConfirm = async (nickname: string) => {
@@ -213,6 +225,7 @@ export default function MainPage() {
             className="w-40 h-40 md:w-48 md:h-48 object-contain  absolute bottom-[-70px] right-[-110px] pointer-events-none"
           />
         </motion.div>
+
         {/* 랭킹 확인 버튼 추가 */}
         {/* <motion.button
           onClick={() => setIsRankingModalOpen(true)}
@@ -221,6 +234,19 @@ export default function MainPage() {
         >
           🏆 랭킹 확인하기
         </motion.button> */}
+
+        {/* PWA 설치 버튼 - 이미 설치되지 않았고 설치 가능(또는 iOS)한 경우에만 노출 */}
+        {!isStandalone && (isInstallable || isIOS) && (
+          <motion.button
+            onClick={onInstallClick}
+            className="w-full mt-4 text-xs text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
+            whileHover={{ opacity: 1, scale: 1.05 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.7 }}
+          >
+            🐱 귀여운 건 가까이! 설치 방법 확인하기
+          </motion.button>
+        )}
       </div>
 
       {/* 모달들 */}
@@ -231,6 +257,10 @@ export default function MainPage() {
       <RankingModal
         isOpen={isRankingModalOpen}
         onClose={() => setIsRankingModalOpen(false)}
+      />
+      <InstallGuideModal
+        isOpen={isInstallGuideOpen}
+        onClose={() => setIsInstallGuideOpen(false)}
       />
     </Layout>
   );
