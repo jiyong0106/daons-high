@@ -56,7 +56,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
 
           {/* 모달 컨텐츠 */}
           <motion.div
-            className="relative w-full max-w-sm bg-[var(--bg-primary)] rounded-3xl px-3 py-5 shadow-2xl border-2 border-[var(--color-primary)] flex flex-col max-h-[100vh]"
+            className="relative w-full max-w-sm bg-[var(--bg-primary)] rounded-3xl px-3 pt-5 pb-3 shadow-2xl border-2 border-[var(--color-primary)] flex flex-col max-h-[80vh]"
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -103,7 +103,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto custom-scrollbar min-h-[200px]">
+            <div className="flex-1 overflow-y-auto min-h-[200px]">
               {isLoading ? (
                 <div className="flex items-center justify-center py-20">
                   <motion.div
@@ -122,7 +122,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
                   <p className="text-xs">첫 번째 랭커가 되어보세요!</p>
                 </div>
               ) : (
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-1 p-2">
                   {rankings.map((entry, index) => (
                     <motion.li
                       key={`${activeTab}-${entry.user_id}`}
@@ -130,50 +130,43 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: index * 0.05 }}
                       layout
-                      className="flex items-center gap-3 p-3 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-color)]"
+                      className="flex items-center gap-3 py-2 px-3 bg-[var(--bg-surface)] rounded-xl border border-[var(--border-color)]"
                     >
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--bg-primary)] font-bold text-sm text-[var(--color-primary)]">
                         {renderRankIcon(index + 1)}
                       </div>
 
                       <div className="flex-1 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          {/* <span className="text-lg opacity-80">
-                            {entry.cat_name === "라온" ? "🧧" : "🎴"}
-                          </span> */}
-                          <div>
-                            <p className="font-bold text-[var(--text-primary)] text-sm">
-                              {entry.nickname}
-                            </p>
-                            <p className="text-[10px] text-[var(--text-secondary)] opacity-70">
-                              {entry.created_at
-                                ? new Date(
-                                    entry.created_at,
-                                  ).toLocaleDateString()
-                                : ""}
-                            </p>
-                          </div>
+                        <div className="flex flex-col gap-0.5">
+                          <p className="font-bold text-[var(--text-primary)] text-sm">
+                            {entry.nickname}
+                          </p>
+                          <p className="text-[11px] text-[var(--text-secondary)]">
+                            {entry.created_at
+                              ? new Date(entry.created_at).toLocaleDateString()
+                              : ""}
+                          </p>
                         </div>
 
                         <div className="text-right">
                           {activeTab === "score_time" ? (
-                            <>
+                            <div className="flex flex-col gap-0.5">
                               <p className="font-black text-[var(--color-primary)] text-lg tabular-nums leading-tight">
                                 {formatTime(entry.score_time)}
                               </p>
-                              <p className="text-[10px] text-[var(--text-secondary)]">
+                              <p className="text-[11px] text-[var(--text-secondary)]">
                                 {entry.move_count}회 이동
                               </p>
-                            </>
+                            </div>
                           ) : (
-                            <>
+                            <div className="flex flex-col gap-0.5">
                               <p className="font-black text-[var(--color-primary)] text-lg tabular-nums leading-tight">
                                 {entry.move_count}회
                               </p>
-                              <p className="text-[10px] text-[var(--text-secondary)]">
+                              <p className="text-[11px] text-[var(--text-secondary)]">
                                 {formatTime(entry.score_time)}
                               </p>
-                            </>
+                            </div>
                           )}
                         </div>
                       </div>
@@ -185,7 +178,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
 
             <motion.button
               onClick={onClose}
-              className="w-full py-3 mt-6 bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl font-bold shadow-md border border-[var(--border-color)]"
+              className="w-full py-3 mt-3 bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl font-bold shadow-md border border-[var(--border-color)]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
