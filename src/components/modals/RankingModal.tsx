@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { rankingKeys, useGetRankings } from "../../hooks/useRankings";
 import { getGlobalRankings } from "../../api/rankingService";
 import { formatTime } from "../../hooks/useTimer";
-import { rankingss } from "../../utils/rankingMock";
 
 interface RankingModalProps {
   isOpen: boolean;
@@ -31,7 +30,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
         queryFn: () => getGlobalRankings(otherTab),
       });
     }
-  }, [isOpen, activeTab, queryClient]);
+  }, [isOpen, queryClient]);
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: rankingKeys.all });

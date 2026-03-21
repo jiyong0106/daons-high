@@ -254,10 +254,12 @@ export default function MainPage() {
         isOpen={isNicknameModalOpen}
         onConfirm={handleNicknameConfirm}
       />
-      <RankingModal
-        isOpen={isRankingModalOpen}
-        onClose={() => setIsRankingModalOpen(false)}
-      />
+      {isRankingModalOpen && (
+        <RankingModal
+          isOpen={isRankingModalOpen}
+          onClose={() => setIsRankingModalOpen(false)}
+        />
+      )}
       <InstallGuideModal
         isOpen={isInstallGuideOpen}
         onClose={() => setIsInstallGuideOpen(false)}
