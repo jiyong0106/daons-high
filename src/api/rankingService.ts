@@ -12,13 +12,18 @@ export interface RankingEntry {
 
 /**
  * 전역 랭킹 상위 10개 가져오기
+ * @param sortBy 정렬 기준 ("score_time" | "move_count")
  */
-export const getGlobalRankings = async (): Promise<RankingEntry[]> => {
+export const getGlobalRankings = async (
+  sortBy: "score_time" | "move_count" = "score_time"
+): Promise<RankingEntry[]> => {
+  const secondarySort = sortBy === "score_time" ? "move_count" : "score_time";
+
   const { data, error } = await supabase
     .from("rankings")
     .select("*")
-    .order("score_time", { ascending: true })
-    .order("move_count", { ascending: true })
+    .order(sortBy, { ascending: true })
+    .order(secondarySort, { ascending: true })
     .limit(10);
 
   if (error) {
