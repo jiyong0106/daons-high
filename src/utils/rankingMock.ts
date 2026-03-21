@@ -1,4 +1,4 @@
-const rankingss = [
+export const rankingss = [
   {
     id: 1,
     user_id: "b49cc7b0-a249-4fae-821e-9e2a46933970",

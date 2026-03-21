@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getGlobalRankings, type RankingEntry } from "../../api/rankingService";
+import { useQueryClient } from "@tanstack/react-query";
+import { rankingKeys, useGetRankings } from "../../hooks/useRankings";
+import { getGlobalRankings } from "../../api/rankingService";
 import { formatTime } from "../../hooks/useTimer";
+import { rankingss } from "../../utils/rankingMock";
 
 interface RankingModalProps {
   isOpen: boolean;
@@ -9,23 +12,29 @@ interface RankingModalProps {
 }
 
 export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"score_time" | "move_count">(
     "score_time",
   );
-  const [rankings, setRankings] = useState<RankingEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    data: rankings = [],
+    isLoading,
+    isFetching,
+  } = useGetRankings(activeTab);
 
   useEffect(() => {
     if (isOpen) {
-      loadRankings(activeTab);
+      const otherTab = activeTab === "score_time" ? "move_count" : "score_time";
+      queryClient.prefetchQuery({
+        queryKey: rankingKeys.list(otherTab),
+        queryFn: () => getGlobalRankings(otherTab),
+      });
     }
-  }, [isOpen, activeTab]);
+  }, [isOpen, activeTab, queryClient]);
 
-  const loadRankings = async (sortBy: "score_time" | "move_count") => {
-    setIsLoading(true);
-    const data = await getGlobalRankings(sortBy);
-    setRankings(data);
-    setIsLoading(false);
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: rankingKeys.all });
   };
 
   const renderRankIcon = (rank: number) => {
@@ -68,6 +77,31 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
                 <h2 className="text-xl font-bold text-[var(--text-primary)]">
                   명예의 전당
                 </h2>
+                <motion.button
+                  onClick={handleRefresh}
+                  className={`p-1.5 text-[var(--text-secondary)] hover:text-[var(--color-primary)] transition-colors rounded-full hover:bg-[var(--bg-primary)] opacity-60 hover:opacity-100 ${
+                    isFetching ? "animate-spin" : ""
+                  }`}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ rotate: 180 }}
+                  title="새로고침"
+                  disabled={isFetching}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                    <path d="M21 3v5h-5" />
+                  </svg>
+                </motion.button>
               </div>
               {/* 탭 스위처 */}
               <div className="flex bg-[var(--bg-surface)] p-1 rounded-xl mt-5 relative border border-[var(--border-color)]">
@@ -75,8 +109,8 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
                   className="absolute top-1 bottom-1 bg-[var(--color-primary)] rounded-lg shadow-sm"
                   initial={false}
                   animate={{
-                    left: activeTab === "score_time" ? "4px" : "50%",
-                    right: activeTab === "score_time" ? "50%" : "4px",
+                    left: activeTab === "score_time" ? "4.545px" : "50%",
+                    right: activeTab === "score_time" ? "50%" : "4.545px",
                   }}
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
@@ -104,7 +138,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
             </div>
 
             <div className="flex-1 overflow-y-auto min-h-[200px]">
-              {isLoading ? (
+              {isLoading && rankings.length === 0 ? (
                 <div className="flex items-center justify-center py-20">
                   <motion.div
                     className="w-10 h-10 border-4 border-[var(--color-primary)] border-t-transparent rounded-full"
@@ -178,7 +212,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
 
             <motion.button
               onClick={onClose}
-              className="w-full py-3 mt-3 bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl font-bold shadow-md border border-[var(--border-color)]"
+              className=" py-3 mt-3  bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl font-bold shadow-md border border-[var(--border-color)]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
 import { useGameStore } from "../stores/gameStore";
 import { formatTime } from "../hooks/useTimer";
-import { addOrUpdateRanking } from "../api/rankingService";
+import { useAddRanking } from "../hooks/useRankings";
 import Layout from "../components/layout/Layout";
 
 export default function ResultPage() {
@@ -22,10 +22,12 @@ export default function ResultPage() {
     initGame,
   } = useGameStore();
 
-  // 게임 완료 시 랭킹 저장 (Supabase 글로벌 랭킹)
+  const { mutate: addRanking } = useAddRanking();
+
+  // 게임 완료 시 랭킹 저장 (React Query Mutation)
   useEffect(() => {
     if (gameStatus === "completed" && userName && userId) {
-      addOrUpdateRanking({
+      addRanking({
         user_id: userId,
         nickname: userName,
         score_time: elapsedTime,
@@ -33,7 +35,7 @@ export default function ResultPage() {
         cat_name: catName,
       });
     }
-  }, [gameStatus, userName, userId, elapsedTime, moveCount, catName]);
+  }, [gameStatus, userName, userId, elapsedTime, moveCount, catName, addRanking]);
 
   // 게임 완료 상태가 아니면 메인으로
   useEffect(() => {
