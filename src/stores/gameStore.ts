@@ -16,6 +16,7 @@ export type GameStatus = "idle" | "loading" | "playing" | "completed";
 
 interface GameState {
   // 사용자 정보
+  userId: string; // 고유 식별자 (로컬 스토리지 저장)
   userName: string | null;
   setUserName: (name: string) => void;
 
@@ -37,6 +38,13 @@ interface GameState {
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
+  userId: (() => {
+    const stored = localStorage.getItem("daons_high_user_id");
+    if (stored) return stored;
+    const newId = crypto.randomUUID();
+    localStorage.setItem("daons_high_user_id", newId);
+    return newId;
+  })(),
   userName: getStoredUserName(),
   setUserName: (name: string) => {
     setLocalUserName(name);

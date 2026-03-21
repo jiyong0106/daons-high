@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
 import { useGameStore } from "../stores/gameStore";
 import { formatTime } from "../hooks/useTimer";
-import { saveRanking } from "../utils/rankingUtils";
+import { addOrUpdateRanking } from "../api/rankingService";
 import Layout from "../components/layout/Layout";
 
 export default function ResultPage() {
@@ -17,21 +17,23 @@ export default function ResultPage() {
     elapsedTime,
     catName,
     userName,
+    userId,
     resetGame,
     initGame,
   } = useGameStore();
 
-  // 게임 완료 시 랭킹 저장
+  // 게임 완료 시 랭킹 저장 (Supabase 글로벌 랭킹)
   useEffect(() => {
-    if (gameStatus === "completed" && userName) {
-      saveRanking({
-        userName,
-        time: elapsedTime,
-        moveCount,
-        date: Date.now(),
+    if (gameStatus === "completed" && userName && userId) {
+      addOrUpdateRanking({
+        user_id: userId,
+        nickname: userName,
+        score_time: elapsedTime,
+        move_count: moveCount,
+        cat_name: catName,
       });
     }
-  }, [gameStatus, userName, elapsedTime, moveCount]);
+  }, [gameStatus, userName, userId, elapsedTime, moveCount, catName]);
 
   // 게임 완료 상태가 아니면 메인으로
   useEffect(() => {
@@ -39,30 +41,6 @@ export default function ResultPage() {
       navigate("/", { replace: true });
     }
   }, [gameStatus, navigate]);
-
-  // 기록 카드 캡처 및 저장 기능
-  // const handleSaveRecord = async () => {
-  //   if (!cardRef.current) return;
-
-  //   try {
-  //     const canvas = await html2canvas(cardRef.current, {
-  //       backgroundColor: "#fff8f0", // var(--bg-primary) 색상 명시
-  //       scale: 2, // 고해상도 캡처
-  //       useCORS: true,
-  //       logging: false,
-  //     });
-
-  //     const url = canvas.toDataURL("image/png");
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = `daons-high-${catName}-${Date.now()}.png`;
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //   } catch (error) {
-  //     console.error("기록 저장 실패:", error);
-  //   }
-  // };
 
   // 기록 카드 캡처 및 공유 기능 (Web Share API)
   const handleShareRecord = async () => {
@@ -192,15 +170,6 @@ export default function ResultPage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          {/* <motion.button
-            onClick={handleSaveRecord}
-            className="w-full py-3 bg-[var(--color-primary)] text-white rounded-xl font-bold shadow-lg cursor-pointer"
-            whileHover={{ scale: 1.03, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            💾 기록 저장하기
-          </motion.button> */}
-
           {typeof navigator !== "undefined" && "share" in navigator && (
             <motion.button
               onClick={handleShareRecord}

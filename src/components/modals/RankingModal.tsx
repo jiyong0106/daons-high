@@ -1,5 +1,6 @@
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { getRankings } from "../../utils/rankingUtils";
+import { getGlobalRankings, type RankingEntry } from "../../api/rankingService";
 import { formatTime } from "../../hooks/useTimer";
 
 interface RankingModalProps {
@@ -8,7 +9,21 @@ interface RankingModalProps {
 }
 
 export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
-  const rankings = getRankings();
+  const [rankings, setRankings] = useState<RankingEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      loadRankings();
+    }
+  }, [isOpen]);
+
+  const loadRankings = async () => {
+    setIsLoading(true);
+    const data = await getGlobalRankings();
+    setRankings(data);
+    setIsLoading(false);
+  };
 
   return (
     <AnimatePresence>
@@ -40,8 +55,16 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
               </p>
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-              {rankings.length === 0 ? (
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar min-h-[200px]">
+              {isLoading ? (
+                <div className="flex items-center justify-center py-20">
+                  <motion.div
+                    className="w-10 h-10 border-4 border-[var(--color-primary)] border-t-transparent rounded-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  />
+                </div>
+              ) : rankings.length === 0 ? (
                 <div className="text-center py-10 text-[var(--text-secondary)] opacity-60">
                   <p>아직 기록이 없어요.</p>
                   <p className="text-xs">첫 번째 랭커가 되어보세요!</p>
@@ -50,7 +73,7 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
                 <ul className="flex flex-col gap-2">
                   {rankings.map((entry, index) => (
                     <motion.li
-                      key={entry.date}
+                      key={entry.user_id}
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: index * 0.05 }}
@@ -68,19 +91,19 @@ export default function RankingModal({ isOpen, onClose }: RankingModalProps) {
                         </span>
                         <div>
                           <p className="font-bold text-[var(--text-primary)] text-sm">
-                            {entry.userName}
+                            {entry.nickname}
                           </p>
                           <p className="text-[10px] text-[var(--text-secondary)] opacity-70">
-                            {new Date(entry.date).toLocaleDateString()}
+                            {entry.created_at ? new Date(entry.created_at).toLocaleDateString() : ""}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="font-black text-[var(--color-primary)] tabular-nums">
-                          {formatTime(entry.time)}
+                          {formatTime(entry.score_time)}
                         </p>
                         <p className="text-[10px] text-[var(--text-secondary)]">
-                          {entry.moveCount}회 이동
+                          {entry.move_count}회 이동
                         </p>
                       </div>
                     </motion.li>
