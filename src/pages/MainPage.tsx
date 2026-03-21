@@ -105,7 +105,7 @@ export default function MainPage() {
 
   return (
     <Layout>
-      <div className="flex-1 flex flex-col items-center justify-start gap-5 px-2 py-15 relative">
+      <div className="flex-1 flex flex-col items-center justify-start gap-5 px-2 py-6 relative">
         <FloatingEmojis />
         <TypingText text={description} />
 
@@ -225,28 +225,29 @@ export default function MainPage() {
             className="w-40 h-40 md:w-48 md:h-48 object-contain  absolute bottom-[-70px] right-[-110px] pointer-events-none"
           />
         </motion.div>
-
-        {/* 랭킹 확인 버튼 추가 */}
-        <motion.button
-          onClick={() => setIsRankingModalOpen(true)}
-          className="w-full mt-4 text-sm text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
-          whileHover={{ opacity: 1, scale: 1.05 }}
-        >
-          🏆 랭킹 확인하기
-        </motion.button>
-
-        {/* PWA 설치 버튼 - 이미 설치되지 않았고 설치 가능(또는 iOS)한 경우에만 노출 */}
-        {!isStandalone && (isInstallable || isIOS) && (
+        <div>
+          {/* 랭킹 확인 버튼 추가 */}
           <motion.button
-            onClick={onInstallClick}
-            className="w-full mt-4 text-xs text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
+            onClick={() => setIsRankingModalOpen(true)}
+            className="w-full mt-4 text-sm text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
             whileHover={{ opacity: 1, scale: 1.05 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.7 }}
           >
-            🐱 귀여운 건 가까이! 설치 방법 확인하기
+            🏆 랭킹 확인하기
           </motion.button>
-        )}
+
+          {/* PWA 설치 버튼 - 이미 설치되지 않았고 설치 가능(또는 iOS)한 경우에만 노출 */}
+          {!isStandalone && (isInstallable || isIOS) && (
+            <motion.button
+              onClick={onInstallClick}
+              className="w-full mt-3 text-xs text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
+              whileHover={{ opacity: 1, scale: 1.05 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.7 }}
+            >
+              🐱 귀여운 건 가까이! 설치 방법 확인하기
+            </motion.button>
+          )}
+        </div>
       </div>
 
       {/* 모달들 */}
