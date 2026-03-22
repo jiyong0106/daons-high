@@ -1,15 +1,39 @@
 import { GRID_SIZE, TOTAL_TILES } from "./puzzleUtils";
 
-// 로컬 고양이 이미지 목록 (da*.png, ra*.png)
+// 로컬 고양이 이미지 목록 (png, webp 지원)
 const CAT_IMAGE_MODULES = import.meta.glob<{ default: string }>(
-  "../assets/images/*.png",
+  "../assets/images/*.{png,webp}",
   { eager: true },
 );
 
-// 이미지 경로 배열로 변환
-const CAT_IMAGES: string[] = Object.values(CAT_IMAGE_MODULES).map(
-  (mod) => mod.default,
-);
+// 이미지 경로 배열로 변환 (동일 파일명이면 webp 우선)
+const CAT_IMAGES: string[] = (() => {
+  const paths = Object.values(CAT_IMAGE_MODULES).map((mod) => mod.default);
+  const uniqueImages = new Map<string, string>();
+
+  paths.forEach((path) => {
+    const { name, ext } = parsePath(path);
+    const existing = uniqueImages.get(name);
+
+    // webp가 있거나, 아직 해당 이름의 이미지가 없으면 추가/교체
+    if (!existing || ext.toLowerCase() === ".webp") {
+      uniqueImages.set(name, path);
+    }
+  });
+
+  return Array.from(uniqueImages.values());
+})();
+
+// 간단한 경로 파싱 유틸 (URL 형태 대응)
+function parsePath(path: string) {
+  const filename = path.split("/").pop() || "";
+  const lastDot = filename.lastIndexOf(".");
+  if (lastDot === -1) return { name: filename, ext: "" };
+  return {
+    name: filename.slice(0, lastDot),
+    ext: filename.slice(lastDot),
+  };
+}
 
 /**
  * 이미지 경로에서 고양이 이름(다온/라온)을 추출.
