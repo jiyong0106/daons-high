@@ -11,6 +11,11 @@ export default defineConfig({
     // 2. PWA 설정 추가
     VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg}"], // 캐싱할 파일 대상
+        skipWaiting: true, // 새로운 SW가 나타나면 즉시 활성화
+        clientsClaim: true, // 새로운 SW가 활성화되자마자 즉시 페이지 제어권을 가짐
+      },
       includeAssets: ["favicon.ico", "image/iphone.png", "image/metaimage.png"],
       manifest: {
         name: "다온스하이 | daon's high",
