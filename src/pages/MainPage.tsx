@@ -232,7 +232,7 @@ export default function MainPage() {
             className="w-full mt-4 text-sm text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
             whileHover={{ opacity: 1, scale: 1.05 }}
           >
-            🏆 랭킹 확인하기
+            🏆 명예의 전당
           </motion.button>
 
           {/* PWA 설치 버튼 - 이미 설치되지 않았고 설치 가능(또는 iOS)한 경우에만 노출 */}
