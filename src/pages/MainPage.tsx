@@ -244,7 +244,7 @@ export default function MainPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.7 }}
             >
-              🐱 귀여운 건 가까이! 설치 방법 확인하기
+              모바일 설치 방법 확인하기
             </motion.button>
           )}
         </div>
