@@ -96,7 +96,7 @@ export default function ResultPage() {
         {/* 캡처 대상 영역 */}
         <div
           ref={cardRef}
-          className="flex flex-col items-center gap-6 p-4 bg-[var(--bg-primary)] rounded-3xl"
+          className="flex flex-col items-center gap-6 p-4 bg-(--bg-primary) rounded-3xl"
         >
           {/* 헤더 */}
           <motion.div
@@ -105,10 +105,10 @@ export default function ResultPage() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
+            <h1 className="text-3xl font-bold text-(--text-primary) mb-2">
               🎉 축하합니다!
             </h1>
-            <p className="text-[var(--text-secondary)]">
+            <p className="text-(--text-secondary)">
               귀여운 {catName}이를 완성했어요!
             </p>
           </motion.div>
@@ -127,8 +127,8 @@ export default function ResultPage() {
               }}
             >
               {/* 부적 느낌의 프레임 */}
-              <div className="absolute -inset-3 border-2 border-[var(--color-primary)] rounded-3xl opacity-30 rotate-1" />
-              <div className="absolute -inset-3 border-2 border-[var(--color-accent)] rounded-3xl opacity-20 -rotate-1" />
+              <div className="absolute -inset-3 border-2 border-(--color-primary) rounded-3xl opacity-30 rotate-1" />
+              <div className="absolute -inset-3 border-2 border-(--color-accent) rounded-3xl opacity-20 -rotate-1" />
 
               <img
                 src={selectedImage}
@@ -140,25 +140,25 @@ export default function ResultPage() {
 
           {/* 기록 카드 */}
           <motion.div
-            className="flex gap-6 bg-[var(--bg-surface)] px-8 py-4 rounded-2xl shadow-md"
+            className="flex gap-6 bg-(--bg-surface) px-8 py-4 rounded-2xl shadow-md"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
             <div className="text-center">
-              <p className="text-xs text-[var(--text-secondary)] mb-1">
+              <p className="text-xs text-(--text-secondary) mb-1">
                 ⏱ 소요 시간
               </p>
-              <p className="text-2xl font-bold text-[var(--color-primary)] tabular-nums">
+              <p className="text-2xl font-bold text-(--color-primary) tabular-nums">
                 {formatTime(elapsedTime)}
               </p>
             </div>
-            <div className="w-px bg-[var(--border-color)]" />
+            <div className="w-px bg-(--border-color)" />
             <div className="text-center">
-              <p className="text-xs text-[var(--text-secondary)] mb-1">
+              <p className="text-xs text-(--text-secondary) mb-1">
                 👆 이동 횟수
               </p>
-              <p className="text-2xl font-bold text-[var(--color-primary)] tabular-nums">
+              <p className="text-2xl font-bold text-(--color-primary) tabular-nums">
                 {moveCount}회
               </p>
             </div>
@@ -175,7 +175,7 @@ export default function ResultPage() {
           {typeof navigator !== "undefined" && "share" in navigator && (
             <motion.button
               onClick={handleShareRecord}
-              className="w-full py-3 bg-[var(--color-accent)] text-white rounded-xl font-bold shadow-md cursor-pointer"
+              className="w-full py-3 bg-(--color-accent) text-white rounded-xl font-bold shadow-md cursor-pointer"
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -185,7 +185,7 @@ export default function ResultPage() {
 
           <motion.button
             onClick={handlePlayAgain}
-            className="w-full py-3 bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl font-bold shadow-md border border-[var(--border-color)] cursor-pointer"
+            className="w-full py-3 bg-(--bg-surface) text-(--text-primary) rounded-xl font-bold shadow-md border border-(--border-color) cursor-pointer"
             whileHover={{ scale: 1.03, y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
@@ -194,7 +194,7 @@ export default function ResultPage() {
 
           <motion.button
             onClick={handleGoHome}
-            className="text-sm text-[var(--text-secondary)] underline underline-offset-4 cursor-pointer mt-2"
+            className="text-sm text-(--text-secondary) underline underline-offset-4 cursor-pointer mt-2"
             whileHover={{ scale: 1.05 }}
           >
             🏠 홈으로 돌아가기

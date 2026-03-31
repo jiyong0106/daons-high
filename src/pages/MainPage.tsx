@@ -45,7 +45,7 @@ function FloatingEmojis() {
 function TypingText({ text }: { text: string }) {
   return (
     <motion.p
-      className="text-xs text-center leading-relaxed text-[var(--text-secondary)] opacity-80 max-w-xs md:max-w-md"
+      className="text-xs text-center leading-relaxed text-(--text-secondary) opacity-80 max-w-xs md:max-w-md"
       initial="hidden"
       animate="visible"
       variants={{
@@ -118,13 +118,13 @@ export default function MainPage() {
         >
           {/* 부적 프레임 장식 */}
           <motion.div
-            className="inline-block p-5 md:p-20 mb-8 relative flex items-center justify-center"
+            className="p-5 md:p-20 mb-8 relative flex items-center justify-center"
             initial={{ rotate: -5 }}
             animate={{ rotate: 0 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
           >
-            <div className="absolute inset-0 border-2 border-[var(--color-primary)] rounded-3xl opacity-30 rotate-2"></div>
-            <div className="absolute inset-0 border-2 border-[var(--color-accent)] rounded-3xl opacity-20 -rotate-2" />
+            <div className="absolute inset-0 border-2 border-(--color-primary) rounded-3xl opacity-30 rotate-2"></div>
+            <div className="absolute inset-0 border-2 border-(--color-accent) rounded-3xl opacity-20 -rotate-2" />
 
             {/* 고양이 이모지 크기를 줄여서 박스 안에 쏙 들어가게 함 */}
             <span className="text-6xl md:text-7xl relative z-10 leading-none">
@@ -133,7 +133,7 @@ export default function MainPage() {
           </motion.div>
 
           <motion.h1
-            className="text-4xl md:text-5xl font-bold text-[var(--text-primary)] tracking-[0.15em]"
+            className="text-4xl md:text-5xl font-bold text-(--text-primary) tracking-[0.15em]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
@@ -142,7 +142,7 @@ export default function MainPage() {
           </motion.h1>
 
           <motion.p
-            className="text-base md:text-lg text-[var(--text-secondary)] mb-4 tracking-[0.2em]"
+            className="text-base md:text-lg text-(--text-secondary) mb-4 tracking-[0.2em]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -151,7 +151,7 @@ export default function MainPage() {
           </motion.p>
 
           <motion.p
-            className="text-sm md:text-base text-[var(--color-primary)] font-medium tracking-wide"
+            className="text-sm md:text-base text-(--color-primary) font-medium tracking-wide"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
@@ -167,7 +167,7 @@ export default function MainPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          <div className="flex flex-col gap-2 text-xs md:text-sm text-[var(--text-secondary)] opacity-80">
+          <div className="flex flex-col gap-2 text-xs md:text-sm text-(--text-secondary) opacity-80">
             <p>🧩 3×3 슬라이딩 퍼즐로 사진을 맞춰보세요</p>
             <p>🐾 총 26장의 귀여운 다온이, 라온이가 기다리고 있어요</p>
           </div>
@@ -184,7 +184,7 @@ export default function MainPage() {
             onClick={handleStartPuzzle}
             className="
                px-12 py-3 
-               bg-gradient-to-br from-[var(--color-primary)] to-[#A00000]
+               bg-linear-to-br from-(--color-primary) to-[#A00000]
                text-white text-md  tracking-widest
                rounded-2xl shadow-2xl
                cursor-pointer
@@ -209,7 +209,7 @@ export default function MainPage() {
           >
             {/* 버튼 내부 광택 효과 */}
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+              className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
               animate={{ x: ["-200%", "200%"] }}
               transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
             />
@@ -229,7 +229,7 @@ export default function MainPage() {
           {/* 랭킹 확인 버튼 추가 */}
           <motion.button
             onClick={() => setIsRankingModalOpen(true)}
-            className="w-full mt-4 text-sm text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
+            className="w-full mt-4 text-sm text-(--text-secondary) font-medium underline underline-offset-4 opacity-70 cursor-pointer"
             whileHover={{ opacity: 1, scale: 1.05 }}
           >
             🏆 명예의 전당
@@ -239,7 +239,7 @@ export default function MainPage() {
           {!isStandalone && (isInstallable || isIOS) && (
             <motion.button
               onClick={onInstallClick}
-              className="w-full mt-3 text-xs text-[var(--text-secondary)] font-medium underline underline-offset-4 opacity-70 cursor-pointer"
+              className="w-full mt-3 text-xs text-(--text-secondary) font-medium underline underline-offset-4 opacity-70 cursor-pointer"
               whileHover={{ opacity: 1, scale: 1.05 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 0.7 }}

@@ -45,14 +45,14 @@ export default function PuzzleBoard() {
         transition={{ delay: 0.3 }}
       >
         {/* 작은 썸네일 (항상 표시) */}
-        <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-[var(--color-accent)] shadow-md">
+        <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-(--color-accent) shadow-md">
           <img
             src={selectedImage || ""}
             alt="원본 이미지"
             className="w-full h-full object-cover"
           />
         </div>
-        <span className="text-xs text-[var(--text-secondary)] flex items-center gap-1">
+        <span className="text-xs text-(--text-secondary) flex items-center gap-1">
           {isFlipped ? "👆 퍼즐로 돌아가기" : "👆 탭하여 원본 보기"}
         </span>
       </motion.div>
@@ -126,18 +126,18 @@ export default function PuzzleBoard() {
               />
 
               {/* 반투명 오버레이 + 힌트 라벨 */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 rounded-xl" />
-              <div className="absolute top-3 left-3 bg-[var(--color-accent)] text-white text-xs px-3 py-1 rounded-full shadow-md">
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/20 rounded-xl" />
+              <div className="absolute top-3 left-3 bg-(--color-accent) text-white text-xs px-3 py-1 rounded-full shadow-md">
                 💡 원본 이미지
               </div>
               <div className="absolute bottom-3 left-0 right-0 text-center ">
-                <span className="text-white text-sm px-3 py-1 rounded-full bg-[var(--color-accent)]">
+                <span className="text-white text-sm px-3 py-1 rounded-full bg-(--color-accent)">
                   👆 탭하여 퍼즐로 돌아가기
                 </span>
               </div>
 
               {/* 테두리 장식 */}
-              <div className="absolute inset-0 border-3 border-[var(--color-accent)] rounded-xl opacity-60" />
+              <div className="absolute inset-0 border-3 border-(--color-accent) rounded-xl opacity-60" />
             </div>
           </div>
         </motion.div>

@@ -60,7 +60,7 @@ export default function PuzzlePage() {
             >
               🐱
             </motion.div>
-            <p className="text-[var(--text-secondary)]">{loadingMsg}</p>
+            <p className="text-(--text-secondary)">{loadingMsg}</p>
           </motion.div>
         </div>
       </Layout>
@@ -77,7 +77,7 @@ export default function PuzzlePage() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          <h1 className="text-xl font-bold text-[var(--text-primary)]">
+          <h1 className="text-xl font-bold text-(--text-primary)">
             🧩 퍼즐을 맞춰보세요!
           </h1>
         </motion.div>
@@ -93,7 +93,7 @@ export default function PuzzlePage() {
           onClick={async () => {
             await initGame();
           }}
-          className="text-sm text-[var(--color-accent)] underline underline-offset-4 cursor-pointer"
+          className="text-sm text-(--color-accent) underline underline-offset-4 cursor-pointer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           initial={{ opacity: 0 }}

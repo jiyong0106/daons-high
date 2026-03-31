@@ -18,17 +18,17 @@ export default function PuzzleControls() {
       {/* 스탯 영역 */}
       <div className="flex justify-center gap-8">
         {/* 타이머 */}
-        <div className="flex items-center gap-2 bg-[var(--bg-surface)] px-4 py-2 rounded-xl shadow-sm">
+        <div className="flex items-center gap-2 bg-(--bg-surface) px-4 py-2 rounded-xl shadow-sm">
           <span className="text-lg">⏱</span>
-          <p className="text-lg font-bold text-[var(--text-primary)] tabular-nums">
+          <p className="text-lg font-bold text-(--text-primary) tabular-nums">
             {formatTime(elapsedTime)}
           </p>
         </div>
 
         {/* 이동 횟수 */}
-        <div className="flex items-center gap-2 bg-[var(--bg-surface)] px-4 py-2 rounded-xl shadow-sm">
+        <div className="flex items-center gap-2 bg-(--bg-surface) px-4 py-2 rounded-xl shadow-sm">
           <span className="text-lg">👆</span>
-          <p className="text-lg font-bold text-[var(--text-primary)] tabular-nums">
+          <p className="text-lg font-bold text-(--text-primary) tabular-nums">
             {moveCount}
           </p>
         </div>
@@ -38,7 +38,7 @@ export default function PuzzleControls() {
       <div className="flex justify-center gap-3">
         <motion.button
           onClick={shuffleOnly}
-          className="px-5 py-2.5 bg-[var(--color-accent)] text-white rounded-xl font-medium text-sm shadow-md cursor-pointer"
+          className="px-5 py-2.5 bg-(--color-accent) text-white rounded-xl font-medium text-sm shadow-md cursor-pointer"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -48,7 +48,7 @@ export default function PuzzleControls() {
 
         <motion.button
           onClick={resetGame}
-          className="px-5 py-2.5 bg-[var(--bg-surface)] text-[var(--text-primary)] rounded-xl font-medium text-sm shadow-md border border-[var(--border-color)] cursor-pointer"
+          className="px-5 py-2.5 bg-(--bg-surface) text-(--text-primary) rounded-xl font-medium text-sm shadow-md border border-(--border-color) cursor-pointer"
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 400, damping: 20 }}

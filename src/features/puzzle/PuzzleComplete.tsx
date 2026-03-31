@@ -68,7 +68,7 @@ export default function PuzzleComplete() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-[var(--bg-primary)] rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center"
+              className="bg-(--bg-primary) rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center"
               initial={{ scale: 0, rotate: -10 }}
               animate={{ scale: 1, rotate: 0 }}
               exit={{ scale: 0 }}
@@ -90,7 +90,7 @@ export default function PuzzleComplete() {
               </motion.div>
 
               <motion.h2
-                className="text-2xl font-bold text-[var(--text-primary)] mb-2"
+                className="text-2xl font-bold text-(--text-primary) mb-2"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
@@ -99,7 +99,7 @@ export default function PuzzleComplete() {
               </motion.h2>
 
               <motion.p
-                className="text-[var(--text-secondary)] mb-6"
+                className="text-(--text-secondary) mb-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
@@ -110,7 +110,7 @@ export default function PuzzleComplete() {
               {/* 완성된 이미지 미리보기 */}
               {selectedImage && (
                 <motion.div
-                  className="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg border-4 border-[var(--color-accent)]"
+                  className="w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg border-4 border-(--color-accent)"
                   initial={{ opacity: 0, scale: 0.5 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.9, type: "spring" }}
@@ -131,18 +131,18 @@ export default function PuzzleComplete() {
                 transition={{ delay: 1.0 }}
               >
                 <div className="text-center">
-                  <p className="text-xs text-[var(--text-secondary)]">
+                  <p className="text-xs text-(--text-secondary)">
                     소요 시간
                   </p>
-                  <p className="text-xl font-bold text-[var(--color-primary)]">
+                  <p className="text-xl font-bold text-(--color-primary)">
                     {formatTime(elapsedTime)}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs text-[var(--text-secondary)]">
+                  <p className="text-xs text-(--text-secondary)">
                     이동 횟수
                   </p>
-                  <p className="text-xl font-bold text-[var(--color-primary)]">
+                  <p className="text-xl font-bold text-(--color-primary)">
                     {moveCount}회
                   </p>
                 </div>
@@ -157,7 +157,7 @@ export default function PuzzleComplete() {
               >
                 <motion.button
                   onClick={() => navigate("/result")}
-                  className="w-full py-3 bg-[var(--color-primary)] text-white rounded-xl font-bold text-base shadow-lg cursor-pointer"
+                  className="w-full py-3 bg-(--color-primary) text-white rounded-xl font-bold text-base shadow-lg cursor-pointer"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
