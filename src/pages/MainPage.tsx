@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useGameStore from "../store/useGameStore";
-import Layout from "../components/layout/Layout";
-import NicknameModal from "../components/modals/NicknameModal";
-import RankingModal from "../components/modals/RankingModal";
-import InstallGuideModal from "../components/modals/InstallGuideModal";
-import FloatingEmojis from "../components/main/FloatingEmojis";
-import TypingText from "../components/main/TypingText";
-import MainHero from "../components/main/MainHero";
-import MainCTA from "../components/main/MainCTA";
-import MainFooter from "../components/main/MainFooter";
-import { MAIN_MESSAGES } from "../constants/messages";
+import useGameStore from "@/store/useGameStore";
+import Layout from "@/components/layout/Layout";
+import {
+  NicknameModal,
+  RankingModal,
+  InstallGuideModal,
+} from "@/components/modals";
+import {
+  MainHero,
+  MainCTA,
+  MainFooter,
+  TypingText,
+  FloatingEmojis,
+} from "@/components/main";
+import { MAIN_MESSAGES } from "@/constants/messages";
 
 /**
  * 앱의 진입점인 메인 페이지 컴포넌트

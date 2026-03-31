@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import useGameStore from "../../store/useGameStore";
-import { getEmptyTile } from "../../utils/puzzleUtils";
+import useGameStore from "@/store/useGameStore";
+import { getEmptyTile } from "@/utils/puzzleUtils";
 
 interface Props {
   tileValue: number; // 타일 번호

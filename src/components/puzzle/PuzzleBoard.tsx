@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import useGameStore from "../../store/useGameStore";
+import useGameStore from "@/store/useGameStore";
 import PuzzleTile from "./PuzzleTile";
-import { PUZZLE_MESSAGES } from "../../constants/messages";
+import { PUZZLE_MESSAGES } from "@/constants/messages";
 
 /**
  * 퍼즐 보드 컴포넌트

@@ -2,10 +2,10 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import html2canvas from "html2canvas";
-import useGameStore from "../store/useGameStore";
-import { formatTime } from "../utils/formatter";
-import { useAddRanking } from "../hooks/useRankings";
-import Layout from "../components/layout/Layout";
+import useGameStore from "@/store/useGameStore";
+import { formatTime } from "@/utils/formatter";
+import { useAddRanking } from "@/hooks/useRankings";
+import Layout from "@/components/layout/Layout";
 
 /**
  * 게임 완료 후 최종 결과와 기록을 보여주는 페이지 컴포넌트

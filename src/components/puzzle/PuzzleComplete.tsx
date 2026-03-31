@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import useGameStore from "../../store/useGameStore";
-import { formatTime } from "../../utils/formatter";
+import useGameStore from "@/store/useGameStore";
+import { formatTime } from "@/utils/formatter";
 
 /**
  * 퍼즐 완성 시 나타나는 파티클 효과 컴포넌트

@@ -1,4 +1,4 @@
-import type { GameMetadataType } from "../types/game";
+import type { GameMetadataType } from "@/types/game";
 
 /**
  * 프로젝트 내에서 제공하는 모든 게임 리스트 관리

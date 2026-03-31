@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { GamesPage, MainPage, PuzzlePage, ResultPage } from "../pages";
+import { GamesPage, MainPage, PuzzlePage, ResultPage } from "@/pages";
 
 /**
  * 전역 라우팅 설정

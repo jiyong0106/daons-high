@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { MAIN_MESSAGES } from "../../constants/messages";
+import { MAIN_MESSAGES } from "@/constants/messages";
 
 /**
  * 메인 페이지 상단 히어로 섹션

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import daonGif from "../../assets/images/redaon.gif";
+import daonGif from "@/assets/images/redaon.gif";
 
 interface Props {
   onStart: () => void;

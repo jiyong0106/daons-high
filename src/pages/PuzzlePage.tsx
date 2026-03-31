@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import useGameStore from "../store/useGameStore";
-import useTimer from "../hooks/useTimer";
-import Layout from "../components/layout/Layout";
-import PuzzleBoard from "../components/puzzle/PuzzleBoard";
-import PuzzleControls from "../components/puzzle/PuzzleControls";
-import PuzzleComplete from "../components/puzzle/PuzzleComplete";
-import { PUZZLE_MESSAGES } from "../constants/messages";
-import { GAMES } from "../constants/games";
+import useGameStore from "@/store/useGameStore";
+import useTimer from "@/hooks/useTimer";
+import Layout from "@/components/layout/Layout";
+import {
+  PuzzleBoard,
+  PuzzleControls,
+  PuzzleComplete,
+} from "@/components/puzzle";
+import { PUZZLE_MESSAGES } from "@/constants/messages";
+import { GAMES } from "@/constants/games";
 
 /**
  * 실제 퍼즐 게임이 진행되는 페이지 컴포넌트

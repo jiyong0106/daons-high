@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQueryClient } from "@tanstack/react-query";
-import { rankingKeys, useGetRankings } from "../../hooks/useRankings";
-import { getGlobalRankings } from "../../api/rankingService";
-import { formatTime, formatDate } from "../../utils/formatter";
+import { rankingKeys, useGetRankings } from "@/hooks/useRankings";
+import { getGlobalRankings } from "@/api/rankingService";
+import { formatTime, formatDate } from "@/utils/formatter";
 
 interface Props {
   isOpen: boolean;

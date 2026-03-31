@@ -1,6 +1,6 @@
+import QueryProvider from "@/app/QueryProvider";
 import { AnimatePresence } from "framer-motion";
-import QueryProvider from "./QueryProvider";
-import Router from "./router";
+import Router from "@/app/router";
 
 export default function App() {
   return (

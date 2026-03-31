@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import type { GameMetadataType } from "../../types/game";
+import type { GameMetadataType } from "@/types/game";
 
 interface Props {
   game: GameMetadataType;

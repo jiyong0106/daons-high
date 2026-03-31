@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { usePWAInstall } from "../../hooks/usePWAInstall";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 
 interface Props {
   onShowRanking: () => void;

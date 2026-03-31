@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/layout/Layout";
-import { GAMES } from "../constants/games";
-import { StageCard } from "../components/games";
+import Layout from "@/components/layout/Layout";
+import { GAMES } from "@/constants/games";
+import { StageCard } from "@/components/games";
 
 /**
  * 게임 목록 페이지

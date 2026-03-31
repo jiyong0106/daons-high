@@ -1,20 +1,20 @@
 import { create } from "zustand";
-import type { GameStateType } from "../types/game";
+import type { GameStateType } from "@/types/game";
 import {
   generateSolvablePuzzle,
   moveTile as moveTileUtil,
   isComplete,
   getEmptyTile,
-} from "../utils/puzzleUtils";
+} from "@/utils/puzzleUtils";
 import {
   sliceImage,
   getRandomCatImage,
   getCatNameFromPath,
-} from "../utils/imageUtils";
+} from "@/utils/imageUtils";
 import {
   getStoredUserName,
   setStoredUserName as setLocalUserName,
-} from "../utils/rankingUtils";
+} from "@/utils/rankingUtils";
 
 /**
  * 게임의 전역 상태를 관리하는 Zustand 스토어

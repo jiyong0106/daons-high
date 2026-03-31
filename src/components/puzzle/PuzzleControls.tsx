@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import useGameStore from "../../store/useGameStore";
-import { formatTime } from "../../utils/formatter";
+import useGameStore from "@/store/useGameStore";
+import { formatTime } from "@/utils/formatter";
 
 /**
  * 게임 진행 상태 (이동 횟수, 시간) 표시 및 제어 버튼 컴포넌트
