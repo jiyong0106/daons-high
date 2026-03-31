@@ -4,37 +4,52 @@ import { useQueryClient } from "@tanstack/react-query";
 import { rankingKeys, useGetRankings } from "@/hooks/useRankings";
 import { getGlobalRankings } from "@/api/rankingService";
 import { formatTime, formatDate } from "@/utils/formatter";
+import useGameStore from "@/store/useGameStore";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
+const GRID_SIZES = [3, 4, 5];
+
 /**
  * 전역 랭킹(명예의 전당)을 보여주는 모달 컴포넌트
+ * - 난이도별(3x3, 4x4, 5x5) 및 정렬 기준별 필터링 지원
  */
 const RankingModal = ({ isOpen, onClose }: Props) => {
   const queryClient = useQueryClient();
+  const currentGameSize = useGameStore((s) => s.gridSize);
+
+  // 난이도 선택 상태 (기존 게임 사이즈로 초기화)
+  const [selectedGridSize, setSelectedGridSize] = useState(currentGameSize);
   const [activeTab, setActiveTab] = useState<"score_time" | "move_count">(
     "score_time",
   );
+
+  // 모달이 열릴 때 현재 진행 중인 게임의 난이도를 기본값으로 설정
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedGridSize(currentGameSize);
+    }
+  }, [isOpen, currentGameSize]);
 
   const {
     data: rankings = [],
     isLoading,
     isFetching,
-  } = useGetRankings(activeTab);
+  } = useGetRankings(selectedGridSize, activeTab);
 
   // 현재 탭 반대편 탭의 데이터를 미리 로딩(Prefetch)
   useEffect(() => {
     if (isOpen) {
       const otherTab = activeTab === "score_time" ? "move_count" : "score_time";
       queryClient.prefetchQuery({
-        queryKey: rankingKeys.list(otherTab),
-        queryFn: () => getGlobalRankings(otherTab),
+        queryKey: rankingKeys.list(selectedGridSize, otherTab),
+        queryFn: () => getGlobalRankings(otherTab, selectedGridSize),
       });
     }
-  }, [isOpen, queryClient, activeTab]);
+  }, [isOpen, queryClient, activeTab, selectedGridSize]);
 
   const handleRefresh = () => {
     queryClient.invalidateQueries({ queryKey: rankingKeys.all });
@@ -42,10 +57,14 @@ const RankingModal = ({ isOpen, onClose }: Props) => {
 
   const renderRankIcon = (rank: number) => {
     switch (rank) {
-      case 1: return "🥇";
-      case 2: return "🥈";
-      case 3: return "🥉";
-      default: return rank;
+      case 1:
+        return "🥇";
+      case 2:
+        return "🥈";
+      case 3:
+        return "🥉";
+      default:
+        return rank;
     }
   };
 
@@ -64,13 +83,13 @@ const RankingModal = ({ isOpen, onClose }: Props) => {
 
           {/* 모달 컨텐츠 */}
           <motion.div
-            className="relative w-full max-w-sm bg-(--bg-primary) rounded-3xl px-3 pt-5 pb-3 shadow-2xl border-2 border-(--color-primary) flex flex-col max-h-[80vh]"
+            className="relative w-full max-w-sm bg-(--bg-primary) rounded-3xl px-3 pt-5 pb-3 shadow-2xl border-2 border-(--color-primary) flex flex-col max-h-[85vh]"
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
           >
             <div className="text-center mb-3">
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-2 mb-4">
                 <span className="text-4xl block">🏆</span>
                 <h2 className="text-xl font-bold text-(--text-primary)">
                   명예의 전당
@@ -102,8 +121,25 @@ const RankingModal = ({ isOpen, onClose }: Props) => {
                 </motion.button>
               </div>
 
-              {/* 탭 전환 버튼 */}
-              <div className="flex bg-(--bg-surface) p-1 rounded-xl mt-5 relative border border-(--border-color)">
+              {/* 난이도(Board Size) 선택 탭 */}
+              <div className="flex gap-2 mb-3">
+                {GRID_SIZES.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedGridSize(size)}
+                    className={`flex-1 py-2 rounded-xl text-sm font-bold border-2 transition-all ${
+                      selectedGridSize === size
+                        ? "bg-(--color-primary) border-(--color-primary) text-white shadow-md"
+                        : "bg-(--bg-surface) border-(--border-color) text-(--text-secondary) opacity-60"
+                    }`}
+                  >
+                    {size}x{size}
+                  </button>
+                ))}
+              </div>
+
+              {/* 정렬 기준 탭 전환 버튼 */}
+              <div className="flex bg-(--bg-surface) p-1 rounded-xl relative border border-(--border-color)">
                 <motion.div
                   className="absolute top-1 bottom-1 bg-(--color-primary) rounded-lg shadow-sm"
                   initial={false}
@@ -116,7 +152,9 @@ const RankingModal = ({ isOpen, onClose }: Props) => {
                 <button
                   onClick={() => setActiveTab("score_time")}
                   className={`flex-1 py-1.5 text-xs z-10 transition-colors duration-200 ${
-                    activeTab === "score_time" ? "text-white" : "text-(--text-secondary)"
+                    activeTab === "score_time"
+                      ? "text-white font-bold"
+                      : "text-(--text-secondary)"
                   }`}
                 >
                   ⏱ 최소 시간
@@ -124,7 +162,9 @@ const RankingModal = ({ isOpen, onClose }: Props) => {
                 <button
                   onClick={() => setActiveTab("move_count")}
                   className={`flex-1 py-1.5 text-xs z-10 transition-colors duration-200 ${
-                    activeTab === "move_count" ? "text-white" : "text-(--text-secondary)"
+                    activeTab === "move_count"
+                      ? "text-white font-bold"
+                      : "text-(--text-secondary)"
                   }`}
                 >
                   👆 최소 이동

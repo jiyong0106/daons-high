@@ -23,6 +23,7 @@ const ResultPage = () => {
     catName,
     userName,
     userId,
+    gridSize,
     resetGame,
     initGame,
   } = useGameStore();
@@ -38,9 +39,19 @@ const ResultPage = () => {
         score_time: elapsedTime,
         move_count: moveCount,
         cat_name: catName,
+        grid_size: gridSize,
       });
     }
-  }, [gameStatus, userName, userId, elapsedTime, moveCount, catName, addRanking]);
+  }, [
+    gameStatus,
+    userName,
+    userId,
+    elapsedTime,
+    moveCount,
+    catName,
+    gridSize,
+    addRanking,
+  ]);
 
   // 게임 완료 상태가 아니면 메인으로
   useEffect(() => {

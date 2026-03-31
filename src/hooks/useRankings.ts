@@ -4,16 +4,20 @@ import { getGlobalRankings, addOrUpdateRanking, type RankingEntry } from "../api
 export const rankingKeys = {
   all: ["rankings"] as const,
   lists: () => [...rankingKeys.all, "list"] as const,
-  list: (sortBy: string) => [...rankingKeys.lists(), sortBy] as const,
+  list: (gridSize: number, sortBy: string) =>
+    [...rankingKeys.lists(), gridSize, sortBy] as const,
 };
 
 /**
- * 전역 랭킹 데이터를 가져오는 커스텀 훅
+ * 전역 랭킹 데이터를 가져오는 커스텀 훅 (난이도별)
  */
-export const useGetRankings = (sortBy: "score_time" | "move_count") => {
+export const useGetRankings = (
+  gridSize: number,
+  sortBy: "score_time" | "move_count"
+) => {
   return useQuery({
-    queryKey: rankingKeys.list(sortBy),
-    queryFn: () => getGlobalRankings(sortBy),
+    queryKey: rankingKeys.list(gridSize, sortBy),
+    queryFn: () => getGlobalRankings(sortBy, gridSize),
     staleTime: 1000 * 60, // 1분간 캐시 유지
   });
 };
