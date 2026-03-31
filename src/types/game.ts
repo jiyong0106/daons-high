@@ -5,11 +5,24 @@
 
 export type GameStatusType = "idle" | "loading" | "playing" | "completed";
 
+export interface GameMetadataType {
+  id: string;
+  type: "puzzle" | "quiz" | "etc";
+  title: string;
+  description: string;
+  gridSize: number;
+  difficulty: "Easy" | "Normal" | "Hard" | "Master";
+  icon: string;
+}
+
 export interface GameStateType {
   // 사용자 정보
   userId: string;
   userName: string | null;
   setUserName: (name: string) => void;
+
+  // 게임 설정
+  gridSize: number;
 
   // 게임 상태
   gameStatus: GameStatusType;
@@ -21,7 +34,7 @@ export interface GameStateType {
   elapsedTime: number;
 
   // 액션
-  initGame: () => Promise<void>;
+  initGame: (size?: number) => Promise<void>;
   clickTile: (index: number) => void;
   resetGame: () => void;
   shuffleOnly: () => void;

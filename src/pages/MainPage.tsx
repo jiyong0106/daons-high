@@ -30,7 +30,7 @@ const MainPage = () => {
       return;
     }
     await initGame();
-    navigate("/puzzle");
+    navigate("/games");
   };
 
   // 닉네임 확인 핸들러

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import useGameStore from "../store/useGameStore";
 import useTimer from "../hooks/useTimer";
@@ -8,11 +8,13 @@ import PuzzleBoard from "../components/puzzle/PuzzleBoard";
 import PuzzleControls from "../components/puzzle/PuzzleControls";
 import PuzzleComplete from "../components/puzzle/PuzzleComplete";
 import { PUZZLE_MESSAGES } from "../constants/messages";
+import { GAMES } from "../constants/games";
 
 /**
  * 실제 퍼즐 게임이 진행되는 페이지 컴포넌트
  */
 const PuzzlePage = () => {
+  const { gameId } = useParams<{ gameId: string }>();
   const gameStatus = useGameStore((s) => s.gameStatus);
   const initGame = useGameStore((s) => s.initGame);
   const navigate = useNavigate();
@@ -21,12 +23,17 @@ const PuzzlePage = () => {
   // 타이머 훅 활성화 (로직 추출 완료)
   useTimer();
 
-  // 게임이 초기화되지 않았으면 메인으로 리디렉트
+  // 게임 초기화 로직
   useEffect(() => {
-    if (gameStatus === "idle") {
+    const gameConfig = GAMES.find((g) => g.id === gameId);
+
+    if (!gameConfig) {
       navigate("/", { replace: true });
+      return;
     }
-  }, [gameStatus, navigate]);
+
+    initGame(gameConfig.gridSize);
+  }, [gameId, initGame, navigate]);
 
   // 로딩 메시지 랜덤 선택 (상수 활용)
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { GRID_SIZE, TOTAL_TILES } from "./puzzleUtils";
+
 
 // 로컬 고양이 이미지 목록 (png, webp 지원)
 const CAT_IMAGE_MODULES = import.meta.glob<{ default: string }>(
@@ -81,19 +81,23 @@ export function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 /**
- * 이미지를 3x3 타일로 슬라이싱.
- * 이미 1080x1080 정사각형이므로 크롭은 생략.
- * 각 타일은 360x360 크기의 data URL로 반환.
+ * 이미지를 gridSize x gridSize 타일로 슬라이싱.
+ * 각 타일은 (원본/gridSize) 크기의 data URL로 반환.
  *
  * @param imageSrc 원본 이미지 경로
- * @returns 9개 타일의 data URL 배열
+ * @param gridSize 그리드 크기 (3, 4 등)
+ * @returns 타일 data URL 배열
  */
-export async function sliceImage(imageSrc: string): Promise<string[]> {
+export async function sliceImage(
+  imageSrc: string,
+  gridSize: number,
+): Promise<string[]> {
   const img = await loadImage(imageSrc);
+  const totalTiles = gridSize * gridSize;
 
   // 정사각형 기준 크기 (짧은 변 기준)
   const size = Math.min(img.width, img.height);
-  const tileSize = size / GRID_SIZE;
+  const tileSize = size / gridSize;
 
   // 중앙 크롭 오프셋
   const offsetX = (img.width - size) / 2;
@@ -101,9 +105,9 @@ export async function sliceImage(imageSrc: string): Promise<string[]> {
 
   const tiles: string[] = [];
 
-  for (let i = 0; i < TOTAL_TILES; i++) {
-    const row = Math.floor(i / GRID_SIZE);
-    const col = i % GRID_SIZE;
+  for (let i = 0; i < totalTiles; i++) {
+    const row = Math.floor(i / gridSize);
+    const col = i % gridSize;
 
     const canvas = document.createElement("canvas");
     canvas.width = tileSize;
