@@ -1,14 +1,8 @@
-/**
- * 개별 퍼즐 타일 컴포넌트
- * - Framer Motion으로 부드러운 이동 애니메이션
- * - 빈칸은 투명 처리
- * - 클릭 시 진동 피드백 (모바일)
- */
-
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { EMPTY_TILE, GRID_SIZE } from "../../utils/puzzleUtils";
 
-interface PuzzleTileProps {
+interface Props {
   tileValue: number; // 타일 번호 (0-8)
   currentIndex: number; // 현재 보드상 위치 (0-8)
   imageSrc: string; // 타일 이미지 data URL
@@ -16,24 +10,26 @@ interface PuzzleTileProps {
   onClick: (index: number) => void;
 }
 
-export default function PuzzleTile({
+/**
+ * 개별 퍼즐 타일 컴포넌트
+ * - React.memo를 사용하여 부모 렌더링 시 불필요한 리렌더링 방지 (성능 최적화)
+ */
+const PuzzleTile = memo(({
   tileValue,
   currentIndex,
   imageSrc,
   boardSize,
   onClick,
-}: PuzzleTileProps) {
+}: Props) => {
   const tileSize = boardSize / GRID_SIZE;
   const isEmptyTile = tileValue === EMPTY_TILE;
 
-  // 현재 위치의 행/열 계산
   const row = Math.floor(currentIndex / GRID_SIZE);
   const col = currentIndex % GRID_SIZE;
 
   const handleClick = () => {
     if (isEmptyTile) return;
 
-    // 모바일 햅틱 피드백
     if (navigator.vibrate) {
       navigator.vibrate(30);
     }
@@ -43,7 +39,7 @@ export default function PuzzleTile({
 
   return (
     <motion.div
-      layout // Framer Motion layout animation
+      layout
       className="absolute cursor-pointer"
       style={{
         width: tileSize,
@@ -76,4 +72,6 @@ export default function PuzzleTile({
       )}
     </motion.div>
   );
-}
+});
+
+export default PuzzleTile;

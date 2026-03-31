@@ -1,10 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useGameStore } from "../../stores/gameStore";
-import { formatTime } from "../../hooks/useTimer";
+import useGameStore from "../../store/useGameStore";
+import { formatTime } from "../../utils/formatter";
 
-// 떨어지는 별/고양이발 파티클
-function Particles() {
+/**
+ * 퍼즐 완성 시 나타나는 파티클 효과 컴포넌트
+ */
+const Particles = () => {
   const emojis = ["⭐", "🐾", "✨", "🎉", "🐱", "💛"];
   return (
     <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
@@ -34,13 +36,17 @@ function Particles() {
       ))}
     </div>
   );
-}
+};
 
-export default function PuzzleComplete() {
+/**
+ * 퍼즐 게임 완성 시 축하 애니메이션 및 결과 요약을 보여주는 모달 컴포넌트
+ */
+const PuzzleComplete = () => {
   const gameStatus = useGameStore((s) => s.gameStatus);
   const moveCount = useGameStore((s) => s.moveCount);
   const elapsedTime = useGameStore((s) => s.elapsedTime);
   const selectedImage = useGameStore((s) => s.selectedImage);
+  const catName = useGameStore((s) => s.catName);
   const navigate = useNavigate();
 
   const isCompleted = gameStatus === "completed";
@@ -79,7 +85,6 @@ export default function PuzzleComplete() {
                 delay: 0.3,
               }}
             >
-              {/* 성공 이모지 */}
               <motion.div
                 className="text-6xl mb-4"
                 initial={{ scale: 0, y: -20 }}
@@ -104,7 +109,7 @@ export default function PuzzleComplete() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8 }}
               >
-                귀여운 {useGameStore.getState().catName}이를 완성했어요! 🐱
+                귀여운 {catName}이를 완성했어요! 🐱
               </motion.p>
 
               {/* 완성된 이미지 미리보기 */}
@@ -123,7 +128,7 @@ export default function PuzzleComplete() {
                 </motion.div>
               )}
 
-              {/* 기록 */}
+              {/* 기록 요약 */}
               <motion.div
                 className="flex justify-center gap-6 mb-6"
                 initial={{ opacity: 0 }}
@@ -131,24 +136,20 @@ export default function PuzzleComplete() {
                 transition={{ delay: 1.0 }}
               >
                 <div className="text-center">
-                  <p className="text-xs text-(--text-secondary)">
-                    소요 시간
-                  </p>
+                  <p className="text-xs text-(--text-secondary)">소요 시간</p>
                   <p className="text-xl font-bold text-(--color-primary)">
                     {formatTime(elapsedTime)}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs text-(--text-secondary)">
-                    이동 횟수
-                  </p>
+                  <p className="text-xs text-(--text-secondary)">이동 횟수</p>
                   <p className="text-xl font-bold text-(--color-primary)">
                     {moveCount}회
                   </p>
                 </div>
               </motion.div>
 
-              {/* 버튼 */}
+              {/* 하단 버튼 */}
               <motion.div
                 className="flex flex-col gap-3"
                 initial={{ opacity: 0, y: 10 }}
@@ -170,4 +171,6 @@ export default function PuzzleComplete() {
       )}
     </AnimatePresence>
   );
-}
+};
+
+export default PuzzleComplete;

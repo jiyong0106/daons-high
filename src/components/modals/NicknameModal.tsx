@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface NicknameModalProps {
+interface Props {
   isOpen: boolean;
   onConfirm: (nickname: string) => void;
 }
 
-export default function NicknameModal({ isOpen, onConfirm }: NicknameModalProps) {
+/**
+ * 게임 시작 전 사용자 닉네임을 입력받는 모달 컴포넌트
+ */
+const NicknameModal = ({ isOpen, onConfirm }: Props) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,7 +22,7 @@ export default function NicknameModal({ isOpen, onConfirm }: NicknameModalProps)
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
           {/* 오버레이 */}
           <motion.div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -30,17 +33,17 @@ export default function NicknameModal({ isOpen, onConfirm }: NicknameModalProps)
 
           {/* 모달 컨텐츠 */}
           <motion.div
-            className="relative w-full max-w-sm bg-[var(--bg-primary)] rounded-3xl p-8 shadow-2xl border-2 border-[var(--color-accent)]"
+            className="relative w-full max-w-sm bg-(--bg-primary) rounded-3xl p-8 shadow-2xl border-2 border-(--color-accent)"
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
           >
             <div className="text-center mb-6">
               <span className="text-4xl mb-2 block">✍️</span>
-              <h2 className="text-xl font-bold text-[var(--text-primary)]">
+              <h2 className="text-xl font-bold text-(--text-primary)">
                 닉네임을 입력해주세요
               </h2>
-              <p className="text-sm text-[var(--text-secondary)] mt-1">
+              <p className="text-sm text-(--text-secondary) mt-1">
                 기록을 랭킹에 등록하기 위해 필요해요
               </p>
             </div>
@@ -52,14 +55,14 @@ export default function NicknameModal({ isOpen, onConfirm }: NicknameModalProps)
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="2글자 이상 입력..."
-                className="w-full px-4 py-3 bg-[var(--bg-surface)] border-2 border-[var(--border-color)] rounded-xl text-center font-bold text-[var(--text-primary)] focus:outline-none focus:border-[var(--color-primary)] transition-colors"
+                className="w-full px-4 py-3 bg-(--bg-surface) border-2 border-(--border-color) rounded-xl text-center font-bold text-(--text-primary) focus:outline-none focus:border-(--color-primary) transition-colors"
                 maxLength={10}
               />
 
               <motion.button
                 type="submit"
                 disabled={inputValue.trim().length < 2}
-                className="w-full py-3 bg-[var(--color-primary)] text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 bg-(--color-primary) text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -71,4 +74,6 @@ export default function NicknameModal({ isOpen, onConfirm }: NicknameModalProps)
       )}
     </AnimatePresence>
   );
-}
+};
+
+export default NicknameModal;

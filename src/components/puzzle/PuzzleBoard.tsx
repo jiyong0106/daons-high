@@ -1,9 +1,14 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { useGameStore } from "../../stores/gameStore";
+import useGameStore from "../../store/useGameStore";
 import PuzzleTile from "./PuzzleTile";
+import { PUZZLE_MESSAGES } from "../../constants/messages";
 
-export default function PuzzleBoard() {
+/**
+ * 퍼즐 보드 컴포넌트
+ * - 반응형 크기 계산 및 3D 플립 애니메이션 (원본 힌트)
+ */
+const PuzzleBoard = () => {
   const tiles = useGameStore((s) => s.tiles);
   const tileSources = useGameStore((s) => s.tileSources);
   const selectedImage = useGameStore((s) => s.selectedImage);
@@ -12,11 +17,10 @@ export default function PuzzleBoard() {
   const [boardSize, setBoardSize] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // 반응형 보드 크기 계산
+  // 반응형 보드 크기 계산 로직
   const updateBoardSize = useCallback(() => {
     if (containerRef.current) {
       const containerWidth = containerRef.current.offsetWidth;
-      // 최대 450px, 컨테이너 너비의 95%
       const size = Math.min(450, containerWidth * 0.95);
       setBoardSize(size);
     }
@@ -44,7 +48,6 @@ export default function PuzzleBoard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        {/* 작은 썸네일 (항상 표시) */}
         <div className="w-12 h-12 rounded-lg overflow-hidden border-2 border-(--color-accent) shadow-md">
           <img
             src={selectedImage || ""}
@@ -53,7 +56,7 @@ export default function PuzzleBoard() {
           />
         </div>
         <span className="text-xs text-(--text-secondary) flex items-center gap-1">
-          {isFlipped ? "👆 퍼즐로 돌아가기" : "👆 탭하여 원본 보기"}
+          {isFlipped ? PUZZLE_MESSAGES.PUZZLE_RETURN : PUZZLE_MESSAGES.ORIGINAL_VIEW}
         </span>
       </motion.div>
 
@@ -76,7 +79,7 @@ export default function PuzzleBoard() {
             mass: 1,
           }}
         >
-          {/* ===== 앞면: 퍼즐 보드 ===== */}
+          {/* 앞면: 퍼즐 보드 */}
           <motion.div
             className="absolute inset-0 bg-white rounded-2xl p-1 shadow-2xl"
             style={{ backfaceVisibility: "hidden" }}
@@ -89,7 +92,6 @@ export default function PuzzleBoard() {
               delay: 0.2,
             }}
           >
-            {/* 퍼즐 보드 내부 */}
             <div
               className="relative rounded-xl overflow-hidden"
               style={{ width: boardSize, height: boardSize }}
@@ -107,7 +109,7 @@ export default function PuzzleBoard() {
             </div>
           </motion.div>
 
-          {/* ===== 뒷면: 원본 이미지 ===== */}
+          {/* 뒷면: 원본 이미지 힌트 */}
           <div
             className="absolute inset-0 rounded-2xl p-1 shadow-2xl overflow-hidden"
             style={{
@@ -116,16 +118,12 @@ export default function PuzzleBoard() {
             }}
             onClick={() => setIsFlipped((prev) => !prev)}
           >
-            {/* 부적 느낌의 장식 프레임 */}
             <div className="relative w-full h-full rounded-xl overflow-hidden">
-              {/* 원본 이미지 */}
               <img
                 src={selectedImage || ""}
                 alt="원본 고양이"
                 className="w-full h-full object-cover rounded-xl"
               />
-
-              {/* 반투명 오버레이 + 힌트 라벨 */}
               <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/20 rounded-xl" />
               <div className="absolute top-3 left-3 bg-(--color-accent) text-white text-xs px-3 py-1 rounded-full shadow-md">
                 💡 원본 이미지
@@ -135,8 +133,6 @@ export default function PuzzleBoard() {
                   👆 탭하여 퍼즐로 돌아가기
                 </span>
               </div>
-
-              {/* 테두리 장식 */}
               <div className="absolute inset-0 border-3 border-(--color-accent) rounded-xl opacity-60" />
             </div>
           </div>
@@ -144,4 +140,6 @@ export default function PuzzleBoard() {
       </div>
     </div>
   );
-}
+};
+
+export default PuzzleBoard;

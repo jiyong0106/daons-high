@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
-import { useGameStore } from "../../stores/gameStore";
-import { formatTime } from "../../hooks/useTimer";
+import useGameStore from "../../store/useGameStore";
+import { formatTime } from "../../utils/formatter";
 
-export default function PuzzleControls() {
+/**
+ * 게임 진행 상태 (이동 횟수, 시간) 표시 및 제어 버튼 컴포넌트
+ */
+const PuzzleControls = () => {
   const moveCount = useGameStore((s) => s.moveCount);
   const elapsedTime = useGameStore((s) => s.elapsedTime);
   const shuffleOnly = useGameStore((s) => s.shuffleOnly);
@@ -58,4 +61,6 @@ export default function PuzzleControls() {
       </div>
     </motion.div>
   );
-}
+};
+
+export default PuzzleControls;

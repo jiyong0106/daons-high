@@ -8,29 +8,29 @@ export const rankingKeys = {
 };
 
 /**
- * 전역 랭킹 가져오기 훅
+ * 전역 랭킹 데이터를 가져오는 커스텀 훅
  */
-export function useGetRankings(sortBy: "score_time" | "move_count") {
+export const useGetRankings = (sortBy: "score_time" | "move_count") => {
   return useQuery({
     queryKey: rankingKeys.list(sortBy),
     queryFn: () => getGlobalRankings(sortBy),
-    staleTime: 1000 * 60, // 1분간 신선한 상태 유지
+    staleTime: 1000 * 60, // 1분간 캐시 유지
   });
-}
+};
 
 /**
- * 새로운 기록 등록 훅
+ * 새로운 게임 기록을 등록하거나 업데이트하는 커스텀 훅
  */
-export function useAddRanking() {
+export const useAddRanking = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (entry: RankingEntry) => addOrUpdateRanking(entry),
     onSuccess: (isBetter) => {
-      // 기록이 경신되었을 때만 랭킹 목록 무효화 (다시 불러오기)
+      // 신규 기록이거나 기존 기록 경신 시에만 랭킹 목록 무효화
       if (isBetter) {
         queryClient.invalidateQueries({ queryKey: rankingKeys.all });
       }
     },
   });
-}
+};

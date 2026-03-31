@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useGameStore } from "../stores/gameStore";
-import { useTimer } from "../hooks/useTimer";
+import useGameStore from "../store/useGameStore";
+import useTimer from "../hooks/useTimer";
 import Layout from "../components/layout/Layout";
-import PuzzleBoard from "../features/puzzle/PuzzleBoard";
-import PuzzleControls from "../features/puzzle/PuzzleControls";
-import PuzzleComplete from "../features/puzzle/PuzzleComplete";
+import PuzzleBoard from "../components/puzzle/PuzzleBoard";
+import PuzzleControls from "../components/puzzle/PuzzleControls";
+import PuzzleComplete from "../components/puzzle/PuzzleComplete";
+import { PUZZLE_MESSAGES } from "../constants/messages";
 
-export default function PuzzlePage() {
+/**
+ * 실제 퍼즐 게임이 진행되는 페이지 컴포넌트
+ */
+const PuzzlePage = () => {
   const gameStatus = useGameStore((s) => s.gameStatus);
   const initGame = useGameStore((s) => s.initGame);
   const navigate = useNavigate();
   const [loadingMsg, setLoadingMsg] = useState("");
 
-  // 타이머 훅 활성화
+  // 타이머 훅 활성화 (로직 추출 완료)
   useTimer();
 
   // 게임이 초기화되지 않았으면 메인으로 리디렉트
@@ -24,26 +28,16 @@ export default function PuzzlePage() {
     }
   }, [gameStatus, navigate]);
 
-  // 로딩 메시지 랜덤 선택
+  // 로딩 메시지 랜덤 선택 (상수 활용)
   useEffect(() => {
     if (gameStatus === "loading") {
-      const messages = [
-        "맛있는 츄르 먹는 중...",
-        "캣타워에 올라가는 중...",
-        "창밖 구경하는 중...",
-        "따듯한 곳에서 낮잠 자는 중...",
-        "맹수가 되어 장난감 사냥하는 중...",
-        "기분 좋아 꾹꾹이 하는 중...",
-        "냥빨하고 그루밍 하는 중...",
-        "집사가 불러서 쳐다보는 중...",
-        "집사 무릎에 앉아있는 중...",
-      ];
+      const messages = PUZZLE_MESSAGES.LOADING;
       const randomMsg = messages[Math.floor(Math.random() * messages.length)];
       setLoadingMsg(randomMsg);
     }
   }, [gameStatus]);
 
-  // 로딩 중
+  // 로딩 중 레이아웃
   if (gameStatus === "loading") {
     return (
       <Layout>
@@ -78,17 +72,17 @@ export default function PuzzlePage() {
           transition={{ duration: 0.4 }}
         >
           <h1 className="text-xl font-bold text-(--text-primary)">
-            🧩 퍼즐을 맞춰보세요!
+            {PUZZLE_MESSAGES.HEADER}
           </h1>
         </motion.div>
 
         {/* 퍼즐 보드 */}
         <PuzzleBoard />
 
-        {/* 컨트롤 영역 */}
+        {/* 컨트롤 영역 (기록 및 버튼) */}
         <PuzzleControls />
 
-        {/* 다른 고양이로 새 게임 버튼 */}
+        {/* 다시하기 버튼 */}
         <motion.button
           onClick={async () => {
             await initGame();
@@ -100,12 +94,14 @@ export default function PuzzlePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          🐱 다른 사진으로 다시하기
+          {PUZZLE_MESSAGES.RETRY}
         </motion.button>
       </div>
 
-      {/* 완성 오버레이 */}
+      {/* 완성 오버레이 모달 */}
       <PuzzleComplete />
     </Layout>
   );
-}
+};
+
+export default PuzzlePage;

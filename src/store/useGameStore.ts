@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { GameStateType } from "../types/game";
 import {
   generateSolvablePuzzle,
   moveTile as moveTileUtil,
@@ -12,32 +13,11 @@ import {
 } from "../utils/imageUtils";
 import { getStoredUserName, setStoredUserName as setLocalUserName } from "../utils/rankingUtils";
 
-export type GameStatus = "idle" | "loading" | "playing" | "completed";
-
-interface GameState {
-  // 사용자 정보
-  userId: string; // 고유 식별자 (로컬 스토리지 저장)
-  userName: string | null;
-  setUserName: (name: string) => void;
-
-  // 게임 상태
-  gameStatus: GameStatus;
-  selectedImage: string | null; // 선택된 원본 이미지 경로
-  catName: string; // 고양이 이름 (다온/라온)
-  tiles: number[]; // 현재 타일 배치 [0-8]
-  tileSources: string[]; // 분할된 타일 이미지 data URL 배열 (9개)
-  moveCount: number; // 이동 횟수
-  elapsedTime: number; // 소요 시간 (초)
-
-  // 액션
-  initGame: () => Promise<void>; // 새 게임 초기화 (이미지 로드 + 셔플)
-  clickTile: (index: number) => void; // 타일 클릭 처리
-  resetGame: () => void; // 게임 리셋 (메인으로)
-  shuffleOnly: () => void; // 같은 이미지로 재셔플
-  setElapsedTime: (time: number) => void;
-}
-
-export const useGameStore = create<GameState>((set, get) => ({
+/**
+ * 게임의 전역 상태를 관리하는 Zustand 스토어
+ * 컨벤션: use[Name]Store.ts 형식을 유지
+ */
+const useGameStore = create<GameStateType>((set, get) => ({
   userId: (() => {
     const stored = localStorage.getItem("daons_high_user_id");
     if (stored) return stored;
@@ -134,3 +114,5 @@ export const useGameStore = create<GameState>((set, get) => ({
     set({ elapsedTime: time });
   },
 }));
+
+export default useGameStore;
