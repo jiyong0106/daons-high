@@ -9,6 +9,7 @@ export interface RankingEntry {
   cat_name: string;
   grid_size: number; // 보드 크기 (3, 4, 5)
   created_at?: string;
+  updated_at?: string;
 }
 
 /**
@@ -18,7 +19,7 @@ export interface RankingEntry {
  */
 export const getGlobalRankings = async (
   sortBy: "score_time" | "move_count" = "score_time",
-  gridSize: number = 3
+  gridSize: number = 3,
 ): Promise<RankingEntry[]> => {
   const secondarySort = sortBy === "score_time" ? "move_count" : "score_time";
 
@@ -43,7 +44,7 @@ export const getGlobalRankings = async (
  */
 export const getUserBestScore = async (
   userId: string,
-  gridSize: number
+  gridSize: number,
 ): Promise<RankingEntry | null> => {
   const { data, error } = await supabase
     .from("rankings")
@@ -64,7 +65,7 @@ export const getUserBestScore = async (
  * 새로운 기록 등록 (난이도별 내 최고 기록보다 좋을 때만 업서트)
  */
 export const addOrUpdateRanking = async (
-  entry: RankingEntry
+  entry: RankingEntry,
 ): Promise<boolean> => {
   // 1. 해당 난이도의 기존 기록 확인
   const existing = await getUserBestScore(entry.user_id, entry.grid_size);
@@ -92,11 +93,14 @@ export const addOrUpdateRanking = async (
     },
     {
       onConflict: "user_id,grid_size", // DB 제약 조건에 따라 수정될 수 있음
-    }
+    },
   );
 
   if (error) {
-    console.error(`[${entry.grid_size}x${entry.grid_size}] 랭킹 등록 실패:`, error);
+    console.error(
+      `[${entry.grid_size}x${entry.grid_size}] 랭킹 등록 실패:`,
+      error,
+    );
     return false;
   }
 

@@ -211,7 +211,9 @@ const RankingModal = ({ isOpen, onClose }: Props) => {
                             {entry.nickname}
                           </p>
                           <p className="text-[11px] text-(--text-secondary)">
-                            {entry.created_at ? formatDate(entry.created_at) : ""}
+                            {entry.updated_at
+                              ? formatDate(entry.updated_at)
+                              : ""}
                           </p>
                         </div>
 
