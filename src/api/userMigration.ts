@@ -12,7 +12,7 @@ import {
 const OLD_STORAGE_KEY = "daons_high_user_id";
 
 /**
- * 로컬 스토리지에 남아있는 이전 아이디(UUID) 기록을 새로운 Firebase UID로 통합합니다.
+ * 로컬 스토리지에 남아있는 이전 아이디(UUID) 기록을 새로운 Firebase UID로 통합.
  * @param newUid Firebase 익명 로그인을 통해 발급받은 새로운 UID
  */
 export const migrateUserRecords = async (newUid: string): Promise<void> => {
