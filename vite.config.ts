@@ -51,4 +51,14 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    //  소스 맵 비활성화 (보안 강화)
+    sourcemap: false,
+    //  빌드 결과물 압축 설정
+    minify: "esbuild",
+  },
+  esbuild: {
+    // 배포 빌드 시 모든 콘솔 로그 및 디버거 제거
+    drop: ["console", "debugger"],
+  },
 });

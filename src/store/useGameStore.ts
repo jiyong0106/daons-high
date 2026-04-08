@@ -16,19 +16,47 @@ import {
   setStoredUserName as setLocalUserName,
 } from "@/utils/rankingUtils";
 
+import { auth } from "@/lib/firebase";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import { migrateUserRecords } from "@/api/userMigration";
+
 /**
  * 게임의 전역 상태를 관리하는 Zustand 스토어
  * 컨벤션: use[Name]Store.ts 형식을 유지
  */
 const useGameStore = create<GameStateType>((set, get) => ({
-  userId: (() => {
-    const stored = localStorage.getItem("daons_high_user_id");
-    if (stored) return stored;
-    const newId = crypto.randomUUID();
-    localStorage.setItem("daons_high_user_id", newId);
-    return newId;
-  })(),
+  userId: null, // 초기값 null, 인증 후 설정됨
   userName: getStoredUserName(),
+
+  setUserId: (id: string) => set({ userId: id }),
+
+  // 익명 로그인 초기화 함수
+  initAuth: async () => {
+    try {
+      // 1. 이미 로그인되어 있는지 확인
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        set({ userId: currentUser.uid });
+        // 데이터 이관 시도
+        await migrateUserRecords(currentUser.uid);
+        return;
+      }
+
+      // 2. 인증 상태 변화 감지 및 로그인 실행
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          set({ userId: user.uid });
+          // 인증 상태 변경 시 이관 시도
+          await migrateUserRecords(user.uid);
+        }
+      });
+
+      await signInAnonymously(auth);
+    } catch (error) {
+      console.error("Firebase 익명 로그인 실패:", error);
+    }
+  },
+
   setUserName: (name: string) => {
     setLocalUserName(name);
     set({ userName: name });

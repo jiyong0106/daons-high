@@ -1,21 +1,31 @@
-import { supabase } from "../utils/supabase";
+import { db } from "@/lib/firebase";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 export interface RankingEntry {
-  id?: number;
+  id?: string; // Firestore에서는 문서 ID를 사용 (문자열)
   user_id: string;
   nickname: string;
   score_time: number;
   move_count: number;
   cat_name: string;
-  grid_size: number; // 보드 크기 (3, 4, 5)
+  grid_size: number;
   created_at?: string;
   updated_at?: string;
 }
 
 /**
  * 전역 랭킹 상위 10개 가져오기 (난이도별)
- * @param sortBy 정렬 기준 ("score_time" | "move_count")
- * @param gridSize 보드 크기 (3, 4, 5)
  */
 export const getGlobalRankings = async (
   sortBy: "score_time" | "move_count" = "score_time",
@@ -23,20 +33,43 @@ export const getGlobalRankings = async (
 ): Promise<RankingEntry[]> => {
   const secondarySort = sortBy === "score_time" ? "move_count" : "score_time";
 
-  const { data, error } = await supabase
-    .from("rankings")
-    .select("*")
-    .eq("grid_size", gridSize) // 난이도 필터 추가
-    .order(sortBy, { ascending: true })
-    .order(secondarySort, { ascending: true })
-    .limit(10);
+  try {
+    const rankingsRef = collection(db, "rankings");
+    const q = query(
+      rankingsRef,
+      where("grid_size", "==", gridSize),
+      orderBy(sortBy, "asc"),
+      orderBy(secondarySort, "asc"),
+      limit(10),
+    );
 
-  if (error) {
+    const querySnapshot = await getDocs(q);
+    const rankings: RankingEntry[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      rankings.push({
+        id: doc.id,
+        user_id: data.user_id,
+        nickname: data.nickname,
+        score_time: data.score_time,
+        move_count: data.move_count,
+        cat_name: data.cat_name,
+        grid_size: data.grid_size,
+        created_at: data.created_at?.toDate
+          ? data.created_at.toDate().toISOString()
+          : data.created_at,
+        updated_at: data.updated_at?.toDate
+          ? data.updated_at.toDate().toISOString()
+          : data.updated_at,
+      });
+    });
+
+    return rankings;
+  } catch (error) {
     console.error(`[${gridSize}x${gridSize}] 랭킹 조회 실패:`, error);
     return [];
   }
-
-  return data || [];
 };
 
 /**
@@ -46,19 +79,34 @@ export const getUserBestScore = async (
   userId: string,
   gridSize: number,
 ): Promise<RankingEntry | null> => {
-  const { data, error } = await supabase
-    .from("rankings")
-    .select("*")
-    .eq("user_id", userId)
-    .eq("grid_size", gridSize)
-    .single();
+  try {
+    const docId = `${userId}_${gridSize}`;
+    const docRef = doc(db, "rankings", docId);
+    const docSnap = await getDoc(docRef);
 
-  if (error && error.code !== "PGRST116") {
-    // PGRST116: 결과 없음
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        user_id: data.user_id,
+        nickname: data.nickname,
+        score_time: data.score_time,
+        move_count: data.move_count,
+        cat_name: data.cat_name,
+        grid_size: data.grid_size,
+        created_at: data.created_at?.toDate
+          ? data.created_at.toDate().toISOString()
+          : data.created_at,
+        updated_at: data.updated_at?.toDate
+          ? data.updated_at.toDate().toISOString()
+          : data.updated_at,
+      } as RankingEntry;
+    }
+  } catch (error) {
     console.error(`[${gridSize}x${gridSize}] 사용자 기록 조회 실패:`, error);
   }
 
-  return data || null;
+  return null;
 };
 
 /**
@@ -79,30 +127,32 @@ export const addOrUpdateRanking = async (
 
   if (!isBetter) return false;
 
-  // 3. Upsert 실행
-  // (유의: DB 테이블에서 user_id와 grid_size 기반의 복합 유니크 제약/인덱스가 필요함)
-  const { error } = await supabase.from("rankings").upsert(
-    {
-      user_id: entry.user_id,
-      nickname: entry.nickname,
-      score_time: entry.score_time,
-      move_count: entry.move_count,
-      cat_name: entry.cat_name,
-      grid_size: entry.grid_size,
-      updated_at: new Date().toISOString(),
-    },
-    {
-      onConflict: "user_id,grid_size", // DB 제약 조건에 따라 수정될 수 있음
-    },
-  );
+  // 3. Firestore Set (문서 ID 전략: user_id + grid_size)
+  try {
+    const docId = `${entry.user_id}_${entry.grid_size}`;
+    const docRef = doc(db, "rankings", docId);
 
-  if (error) {
+    await setDoc(
+      docRef,
+      {
+        user_id: entry.user_id,
+        nickname: entry.nickname,
+        score_time: entry.score_time,
+        move_count: entry.move_count,
+        cat_name: entry.cat_name,
+        grid_size: entry.grid_size,
+        created_at: existing ? existing.created_at : serverTimestamp(), // 신규일 때만 생성 시간 저장
+        updated_at: serverTimestamp(),
+      },
+      { merge: true },
+    );
+
+    return true;
+  } catch (error) {
     console.error(
       `[${entry.grid_size}x${entry.grid_size}] 랭킹 등록 실패:`,
       error,
     );
     return false;
   }
-
-  return true;
 };

@@ -18,7 +18,6 @@ import { MAIN_MESSAGES } from "@/constants/messages";
 
 /**
  * 앱의 진입점인 메인 페이지 컴포넌트
- * - UI 정적 섹션들을 서브 컴포넌트로 위함하여 가독성 강화
  */
 const MainPage = () => {
   const navigate = useNavigate();
@@ -42,7 +41,7 @@ const MainPage = () => {
     setUserName(nickname);
     setIsNicknameModalOpen(false);
     await initGame();
-    navigate("/puzzle");
+    navigate("/games");
   };
 
   return (
