@@ -17,9 +17,11 @@ export interface GameMetadataType {
 
 export interface GameStateType {
   // 사용자 정보
-  userId: string;
+  userId: string | null;
   userName: string | null;
   setUserName: (name: string) => void;
+  setUserId: (id: string) => void;
+  initAuth: () => Promise<void>;
 
   // 게임 설정
   gridSize: number;

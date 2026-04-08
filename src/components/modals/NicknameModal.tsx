@@ -14,7 +14,7 @@ const NicknameModal = ({ isOpen, onConfirm }: Props) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (inputValue.trim().length >= 2) {
+    if (inputValue.trim().length >= 2 && inputValue.trim().length <= 8) {
       onConfirm(inputValue.trim());
     }
   };
@@ -54,14 +54,14 @@ const NicknameModal = ({ isOpen, onConfirm }: Props) => {
                 autoFocus
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="2글자 이상 입력..."
+                placeholder="2~8글자 입력..."
                 className="w-full px-4 py-3 bg-(--bg-surface) border-2 border-(--border-color) rounded-xl text-center font-bold text-(--text-primary) focus:outline-none focus:border-(--color-primary) transition-colors"
-                maxLength={10}
+                maxLength={8}
               />
 
               <motion.button
                 type="submit"
-                disabled={inputValue.trim().length < 2}
+                disabled={inputValue.trim().length < 2 || inputValue.trim().length > 8}
                 className="w-full py-3 bg-(--color-primary) text-white rounded-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

@@ -41,7 +41,7 @@ const MainPage = () => {
     setUserName(nickname);
     setIsNicknameModalOpen(false);
     await initGame();
-    navigate("/puzzle");
+    navigate("/games");
   };
 
   return (
