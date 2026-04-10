@@ -12,7 +12,7 @@
 
 | 메인 화면 | 게임 플레이 | 랭킹 및 결과 |
 | :---: | :---: | :---: |
-| ![메인 화면](https://github.com/user-attachments/assets/e9870ef4-2e24-496a-871f-8ddfdf561d55) | ![게임 플레이](https://github.com/user-attachments/assets/a144cef1-de22-4ac0-b4bc-719815f6e653) | ![랭킹 결과](https://github.com/user-attachments/assets/490efd64-20c9-44f1-bfd0-a01352e389d7) |
+| ![메인 화면](https://github.com/user-attachments/assets/e9870ef4-2e24-496a-871f-8ddfdf561d55) | ![게임 목록](https://github.com/user-attachments/assets/a144cef1-de22-4ac0-b4bc-719815f6e653) | ![플레이 화면](https://github.com/user-attachments/assets/490efd64-20c9-44f1-bfd0-a01352e389d7) |
 
 ---
 
